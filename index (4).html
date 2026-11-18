@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Christmas Adventure: The Lost Christmas Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mountains+of+Christmas:wght@700&family=Nunito:wght@600;700;800;900&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   CHRISTMAS ADVENTURE: THE LOST CHRISTMAS TIME
+   Past Simple & Past Continuous game for ม.2
+   ========================================================= */
+:root{
+  --red:#C8102E; --red-dk:#8E0B20; --red-lt:#F04A5E;
+  --green:#14603A; --green-dk:#0B3B24; --green-lt:#2E9A5E;
+  --snow:#FFFFFF; --gold:#E6C27A; --gold-dk:#B8913F; --gold-lt:#F7E3B1;
+  --cream:#FFF6E6; --ink:#2A1A12; --ink-soft:#5E4A3C;
+  --ok:#1E9E57; --bad:#D6243B; --warn:#E89A1B;
+  --radius:22px;
+  --shadow:0 14px 40px rgba(0,0,0,.35);
+  --font-h:'Fredoka','Sarabun',system-ui,sans-serif;
+  --font-b:'Nunito','Sarabun',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+html{background:#0B3B24}
+body{
+  font-family:var(--font-b);color:var(--ink);overflow-x:hidden;min-height:100vh;
+  background:
+    radial-gradient(ellipse at 50% -10%, rgba(230,194,122,.28), transparent 55%),
+    radial-gradient(ellipse at 15% 110%, rgba(200,16,46,.35), transparent 50%),
+    radial-gradient(ellipse at 90% 100%, rgba(46,154,94,.35), transparent 50%),
+    linear-gradient(180deg,#0A2E1C 0%,#0B3B24 45%,#3A0B14 100%);
+  background-attachment:fixed;
+}
+button{font-family:inherit;cursor:pointer;border:none}
+#snow,#fx{position:fixed;inset:0;pointer-events:none}
+#snow{z-index:0} #fx{z-index:60}
+
+/* ---------- string lights ---------- */
+#lights{position:fixed;top:0;left:0;right:0;height:34px;z-index:5;pointer-events:none;display:flex;justify-content:space-around;align-items:flex-start}
+#lights::before{content:"";position:absolute;top:6px;left:-5%;right:-5%;height:22px;border-bottom:2px solid #1d3a28;border-radius:0 0 50% 50%/0 0 100% 100%}
+.bulb{position:relative;width:12px;height:18px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;margin-top:14px;animation:blink 1.6s infinite ease-in-out}
+.bulb::before{content:"";position:absolute;top:-5px;left:3px;width:6px;height:6px;background:#2b3b30;border-radius:2px}
+.bulb.c0{background:#ff3b4f;box-shadow:0 0 12px 3px #ff3b4f}
+.bulb.c1{background:#ffd56b;box-shadow:0 0 12px 3px #ffd56b;animation-delay:.4s}
+.bulb.c2{background:#4ce38b;box-shadow:0 0 12px 3px #4ce38b;animation-delay:.8s}
+.bulb.c3{background:#fff;box-shadow:0 0 12px 3px #fff;animation-delay:1.2s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35;box-shadow:none}}
+
+/* ---------- mute ---------- */
+#muteBtn{position:fixed;top:40px;right:14px;z-index:70;width:52px;height:52px;border-radius:50%;
+  background:rgba(255,246,230,.95);font-size:24px;box-shadow:0 4px 14px rgba(0,0,0,.35);border:3px solid var(--gold)}
+#muteBtn:active{transform:scale(.92)}
+
+/* ---------- layout ---------- */
+#app{position:relative;z-index:10;min-height:100vh;padding:56px 14px 28px;display:flex;justify-content:center}
+.screen{display:none;width:100%;max-width:920px;animation:screenIn .55s cubic-bezier(.2,.9,.3,1.2)}
+.screen.active{display:block}
+@keyframes screenIn{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+
+.card{background:var(--cream);border-radius:var(--radius);box-shadow:var(--shadow);border:4px solid var(--gold);position:relative}
+.card.pad{padding:26px clamp(16px,4vw,36px)}
+.candy-top{height:14px;border-radius:var(--radius) var(--radius) 0 0;margin:-4px -4px 0;
+  background:repeating-linear-gradient(-45deg,var(--red) 0 14px,#fff 14px 28px)}
+.h-title{font-family:var(--font-h);font-weight:700}
+.center{text-align:center}
+
+/* ---------- buttons ---------- */
+.btn{font-family:var(--font-h);font-weight:700;font-size:clamp(1.1rem,2.6vw,1.35rem);letter-spacing:.5px;
+  padding:16px 30px;border-radius:999px;color:#fff;min-height:58px;
+  background:linear-gradient(180deg,var(--red-lt),var(--red) 55%,var(--red-dk));
+  box-shadow:0 6px 0 #5e0614,0 10px 22px rgba(0,0,0,.35);transition:transform .12s, filter .2s;position:relative}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #5e0614,0 6px 14px rgba(0,0,0,.35)}
+.btn.green{background:linear-gradient(180deg,#3cb874,var(--green-lt) 50%,var(--green));box-shadow:0 6px 0 #0a3d22,0 10px 22px rgba(0,0,0,.35)}
+.btn.gold{color:#4a2d00;background:linear-gradient(180deg,#fff0c4,var(--gold) 55%,var(--gold-dk));box-shadow:0 6px 0 #7c5c1e,0 10px 22px rgba(0,0,0,.35)}
+.btn.ghost{background:transparent;color:var(--green);box-shadow:none;border:3px solid var(--green)}
+.btn[disabled]{filter:grayscale(.6) brightness(.9);cursor:not-allowed;transform:none}
+.btn.pulse{animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* ---------- register ---------- */
+.logo{text-align:center;color:#fff;margin-bottom:18px}
+.logo .small{font-family:var(--font-h);letter-spacing:6px;color:var(--gold-lt);font-size:clamp(.85rem,2.2vw,1.05rem)}
+.logo h1{font-family:'Mountains of Christmas',var(--font-h);font-size:clamp(2.6rem,9vw,5rem);line-height:1;color:#fff;
+  text-shadow:0 0 18px rgba(255,214,107,.7),0 4px 0 var(--red-dk),0 8px 20px rgba(0,0,0,.5)}
+.logo h2{font-family:var(--font-h);font-size:clamp(1.15rem,3.6vw,1.9rem);color:var(--gold);margin-top:6px;
+  text-shadow:0 2px 0 #4a1a00,0 0 14px rgba(230,194,122,.6)}
+.logo p{margin-top:8px;color:#fbe9d0;font-weight:700;font-size:clamp(.95rem,2.4vw,1.1rem)}
+.logo-art{width:min(300px,70vw);margin:0 auto 4px;display:block;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45))}
+.form-card{max-width:520px;margin:0 auto}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:800;color:var(--green-dk);margin-bottom:6px;font-size:1.05rem}
+.field input{width:100%;font:inherit;font-size:1.15rem;padding:14px 16px;border-radius:14px;border:3px solid #e2cfa8;background:#fff;outline:none;transition:border .2s, box-shadow .2s}
+.field input:focus{border-color:var(--green-lt);box-shadow:0 0 0 4px rgba(46,154,94,.2)}
+.field input.err{border-color:var(--bad);animation:shake .4s}
+.row2{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
+.err-msg{color:var(--bad);font-weight:800;min-height:24px;text-align:center;margin:4px 0 10px}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.pending{background:#fff3cd;border:3px dashed var(--warn);border-radius:16px;padding:14px;margin-bottom:16px;font-weight:700;display:none}
+.pending.show{display:block}
+.pending .btn{font-size:1rem;padding:10px 18px;min-height:44px;margin-top:8px}
+
+/* ---------- briefing ---------- */
+.brief{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:center}
+.santa-box{text-align:center}
+.santa-svg{width:100%;max-width:220px}
+.bubble{background:#fff;border-radius:20px;padding:18px 20px;position:relative;border:3px solid var(--red);font-size:1.08rem;line-height:1.65}
+.bubble::before{content:"";position:absolute;left:-16px;top:40px;border:12px solid transparent;border-right-color:var(--red)}
+.bubble b{color:var(--red)}
+.map{display:flex;align-items:stretch;gap:12px;margin:22px 0 8px;flex-wrap:wrap}
+.map-node{flex:1;min-width:220px;border-radius:18px;padding:14px;background:#fff;border:3px solid var(--green-lt);display:flex;gap:12px;align-items:center}
+.map-node.locked{border-color:#bbb;opacity:.75}
+.map-node .ico{font-size:2.2rem}
+.map-node h4{font-family:var(--font-h);color:var(--green-dk);font-size:1.1rem}
+.map-node small{display:block;color:var(--ink-soft);font-weight:700}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0}
+.rule{background:#fff;border-radius:14px;padding:10px 12px;font-weight:700;border-left:6px solid var(--gold);font-size:.98rem}
+
+/* ---------- level intro ---------- */
+.intro{text-align:center;color:#fff}
+.intro .lv{font-family:var(--font-h);letter-spacing:8px;color:var(--gold);font-size:1.2rem}
+.intro h2{font-family:var(--font-h);font-size:clamp(2rem,7vw,3.6rem);text-shadow:0 4px 0 var(--red-dk),0 0 24px rgba(255,214,107,.5);margin:6px 0}
+.intro .scene-big{width:min(520px,92vw);border-radius:22px;border:4px solid var(--gold);box-shadow:var(--shadow);margin:14px auto;display:block;background:#0e2c1e}
+.intro .mission{max-width:620px;margin:0 auto 18px;font-size:1.12rem;font-weight:700;color:#fbe9d0;line-height:1.6}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.chip{background:rgba(255,246,230,.95);color:var(--ink);padding:8px 16px;border-radius:999px;font-weight:800;border:2px solid var(--gold)}
+
+/* ---------- HUD ---------- */
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#fff;margin-bottom:10px;padding-right:58px}
+.hud .who{font-weight:800;font-size:.95rem;line-height:1.25;min-width:0}
+.hud .who .lvtag{display:inline-block;background:var(--red);border:2px solid var(--gold);border-radius:999px;padding:3px 12px;font-family:var(--font-h);margin-bottom:3px}
+.hud .who .nm{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw;color:#fbe9d0}
+.scorebox{background:linear-gradient(180deg,#fff0c4,var(--gold));color:#4a2d00;border-radius:16px;padding:6px 16px;text-align:center;box-shadow:0 4px 0 var(--gold-dk);min-width:110px}
+.scorebox small{display:block;font-weight:900;font-size:.72rem;letter-spacing:2px}
+.scorebox b{font-family:var(--font-h);font-size:1.6rem;line-height:1}
+.scorebox.bump{animation:bump .5s}
+@keyframes bump{50%{transform:scale(1.25)}}
+
+.progress-wrap{background:rgba(0,0,0,.3);border-radius:999px;height:14px;overflow:hidden;border:2px solid rgba(230,194,122,.6)}
+.progress-bar{height:100%;width:0;background:repeating-linear-gradient(-45deg,var(--red) 0 10px,#fff 10px 20px);transition:width .5s}
+.progress-row{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;margin-bottom:10px}
+.progress-row .progress-wrap{flex:1}
+.collect{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;min-width:0}
+.collect span{font-size:1.05rem;filter:grayscale(1) brightness(.6);transition:filter .4s, transform .4s}
+.collect span.on{filter:none;transform:scale(1.15)}
+
+.game-card{padding:18px clamp(14px,3.5vw,30px) 24px}
+.timer-row{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.ring{position:relative;width:70px;height:70px;flex:none}
+.ring svg{width:70px;height:70px;transform:rotate(-90deg)}
+.ring .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);font-size:1.7rem;font-weight:700;color:var(--green-dk)}
+.ring.danger .num{color:var(--bad);animation:beat .5s infinite}
+@keyframes beat{50%{transform:scale(1.18)}}
+.energy{flex:1}
+.energy .lbl{display:flex;justify-content:space-between;font-weight:900;font-size:.85rem;color:var(--green-dk);letter-spacing:1px;margin-bottom:4px}
+.energy .bar{height:22px;border-radius:999px;background:#e9dcc2;overflow:hidden;border:3px solid #fff;box-shadow:inset 0 2px 6px rgba(0,0,0,.2)}
+.energy .fill{height:100%;width:100%;border-radius:999px;background:linear-gradient(90deg,#2E9A5E,#5fd18f);transition:background .3s}
+.energy .fill.mid{background:linear-gradient(90deg,#d99a1b,#f5c84c)}
+.energy .fill.low{background:linear-gradient(90deg,#b5122a,#ff5a6e)}
+
+.scene-strip{display:flex;gap:14px;align-items:stretch;background:#fff;border-radius:18px;border:3px solid #ead6ac;padding:10px;margin-bottom:14px}
+.scene-strip .pic{width:180px;flex:none;border-radius:12px;overflow:hidden;background:#0e2c1e}
+.scene-strip .pic svg{display:block;width:100%;height:100%}
+.scene-strip .txt{flex:1;min-width:0}
+.scene-strip .loc{display:inline-block;font-weight:900;color:#fff;background:var(--green);border-radius:999px;padding:3px 12px;font-size:.82rem;letter-spacing:1px;margin-bottom:6px}
+.scene-strip .story{font-size:1.05rem;line-height:1.6;color:var(--ink-soft);font-weight:600}
+.case-no{font-family:var(--font-h);color:var(--red);font-size:.95rem;letter-spacing:2px;margin-bottom:6px}
+.question{font-family:var(--font-b);font-weight:900;font-size:clamp(1.3rem,3.6vw,1.85rem);line-height:1.45;color:var(--ink);margin:4px 0 18px;text-align:center}
+.question .blank{display:inline-block;min-width:110px;border-bottom:4px dashed var(--red);color:transparent;margin:0 4px;line-height:1.1}
+.question .blank.filled{color:var(--green);border-bottom-color:var(--green);border-bottom-style:solid;animation:pop .4s}
+.qprompt{font-weight:800;color:var(--green-dk);text-align:center;margin-bottom:6px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.options.long{grid-template-columns:1fr}
+.opt{background:#fff;border:3px solid #dcc79e;border-radius:18px;padding:14px 16px;min-height:66px;font-family:var(--font-b);font-weight:800;
+  font-size:clamp(1.05rem,2.8vw,1.3rem);color:var(--ink);display:flex;align-items:center;gap:12px;text-align:left;
+  box-shadow:0 5px 0 #d7c296;transition:transform .12s, border-color .2s, background .2s}
+@media (hover:hover){.opt:hover:not([disabled]){border-color:var(--green-lt);transform:translateY(-2px)}}
+.opt:active:not([disabled]){transform:translateY(3px);box-shadow:0 2px 0 #d7c296}
+.opt .key{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-h);color:#fff;background:var(--green);font-size:1.1rem}
+.opt:nth-child(2) .key{background:var(--red)}
+.opt:nth-child(3) .key{background:var(--gold-dk)}
+.opt:nth-child(4) .key{background:#2f5d8a}
+.opt[disabled]{cursor:default}
+.opt.correct{background:#e3f7ea;border-color:var(--ok);box-shadow:0 5px 0 #8fd2aa;animation:pop .4s}
+.opt.wrong{background:#fde5e8;border-color:var(--bad);box-shadow:0 5px 0 #f0a3ad;animation:shake .4s}
+.opt.dim{opacity:.55}
+@keyframes pop{50%{transform:scale(1.06)}}
+
+/* ---------- overlays ---------- */
+.overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,20,12,.55);backdrop-filter:blur(3px)}
+.overlay.show{display:flex}
+.fb{max-width:560px;width:100%;text-align:center;padding:24px clamp(16px,4vw,30px) 26px;animation:fbIn .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes fbIn{from{transform:scale(.5) rotate(-6deg);opacity:0}to{transform:none;opacity:1}}
+.fb h3{font-family:var(--font-h);font-size:clamp(1.7rem,6vw,2.4rem);margin:4px 0 6px}
+.fb.ok h3{color:var(--ok)} .fb.bad h3{color:var(--bad)} .fb.time h3{color:var(--warn)}
+.fb .pts{font-family:var(--font-h);font-size:1.4rem;color:var(--gold-dk);margin-bottom:8px}
+.fb .ans{background:#fff;border-radius:14px;padding:10px 14px;font-weight:800;margin:10px 0;border:2px solid #e8d6b0;font-size:1.08rem}
+.fb .ans b{color:var(--green)}
+.fb .exp{text-align:left;background:#f1f8f3;border-left:6px solid var(--green-lt);border-radius:12px;padding:12px 14px;line-height:1.6;font-weight:600;color:var(--ink-soft);margin-bottom:12px}
+.fb .exp .tag{display:inline-block;background:var(--green);color:#fff;border-radius:8px;padding:1px 8px;font-size:.82rem;font-weight:900;margin-bottom:4px}
+.fb .clue{background:linear-gradient(135deg,#1b3d5c,#2a5a85);color:#fff;border-radius:14px;padding:12px 14px;text-align:left;margin-bottom:14px;border:2px solid var(--gold);animation:pop .5s .3s both}
+.fb .clue small{color:var(--gold-lt);font-weight:900;letter-spacing:2px;display:block}
+.fb .auto{height:6px;background:#eee;border-radius:9px;overflow:hidden;margin:6px auto 12px;max-width:260px}
+.fb .auto i{display:block;height:100%;background:var(--warn);width:100%}
+.fb-icon{width:110px;height:110px;margin:-70px auto 0;display:block}
+
+/* gift animation */
+.gift{position:relative;width:96px;height:96px;margin:-64px auto 4px}
+.gift .box{position:absolute;bottom:0;left:10px;width:76px;height:56px;background:var(--red);border-radius:6px;border:3px solid var(--red-dk)}
+.gift .box::before{content:"";position:absolute;left:30px;top:0;bottom:0;width:12px;background:var(--gold)}
+.gift .lid{position:absolute;bottom:52px;left:4px;width:88px;height:20px;background:var(--red-lt);border-radius:6px;border:3px solid var(--red-dk);animation:lidOpen .8s .1s forwards}
+.gift .lid::before{content:"";position:absolute;left:35px;top:0;bottom:0;width:12px;background:var(--gold)}
+.gift .lid::after{content:"🎀";position:absolute;left:30px;top:-24px;font-size:24px}
+.gift .star{position:absolute;left:28px;bottom:26px;font-size:40px;opacity:0;animation:starUp .9s .4s forwards}
+@keyframes lidOpen{to{transform:translate(34px,-26px) rotate(28deg)}}
+@keyframes starUp{0%{opacity:0;transform:scale(.3)}60%{opacity:1;transform:translateY(-58px) scale(1.3)}100%{opacity:1;transform:translateY(-50px) scale(1.1)}}
+.bigicon{font-size:64px;margin-top:-62px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+
+#count{font-family:var(--font-h);font-size:clamp(6rem,30vw,12rem);color:#fff;text-shadow:0 0 30px var(--gold),0 8px 0 var(--red-dk)}
+#count.anim{animation:countPop .9s}
+@keyframes countPop{0%{transform:scale(2.4);opacity:0}30%{transform:scale(1);opacity:1}100%{transform:scale(.8);opacity:0}}
+
+/* wipe transition */
+#wipe{position:fixed;inset:0;z-index:80;pointer-events:none;transform:translateX(-105%);
+  background:repeating-linear-gradient(-45deg,var(--red) 0 40px,#fff 40px 80px);display:flex;align-items:center;justify-content:center}
+#wipe span{font-size:110px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+#wipe.go{animation:wipe 1.1s ease-in-out forwards}
+@keyframes wipe{0%{transform:translateX(-105%)}40%,60%{transform:translateX(0)}100%{transform:translateX(105%)}}
+
+/* ---------- level complete ---------- */
+.lvdone{text-align:center}
+.lvdone .big{font-family:var(--font-h);font-size:clamp(2rem,7vw,3.2rem);color:var(--red);margin:6px 0}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:18px 0}
+.stat{background:#fff;border-radius:16px;padding:12px;border:3px solid #ead6ac}
+.stat small{display:block;font-weight:900;color:var(--ink-soft);font-size:.8rem;letter-spacing:1px}
+.stat b{font-family:var(--font-h);font-size:1.9rem;color:var(--green-dk)}
+.unlock{display:inline-block;background:var(--green);color:#fff;font-weight:900;border-radius:999px;padding:8px 18px;margin:6px 0 18px;animation:pulse 1.4s infinite}
+.biggift{position:relative;width:160px;height:150px;margin:0 auto}
+.biggift .box{position:absolute;bottom:0;left:20px;width:120px;height:86px;background:var(--green);border-radius:10px;border:4px solid var(--green-dk)}
+.biggift .box::before{content:"";position:absolute;left:48px;top:0;bottom:0;width:18px;background:var(--gold)}
+.biggift .lid{position:absolute;bottom:80px;left:10px;width:140px;height:30px;background:var(--green-lt);border-radius:10px;border:4px solid var(--green-dk);animation:bigLid 1s .5s forwards}
+.biggift .lid::before{content:"";position:absolute;left:58px;top:0;bottom:0;width:18px;background:var(--gold)}
+.biggift .burst{position:absolute;left:50%;bottom:70px;transform:translateX(-50%);font-size:46px;opacity:0;animation:starUp 1s 1s forwards;white-space:nowrap}
+@keyframes bigLid{to{transform:translate(60px,-50px) rotate(35deg)}}
+
+/* ---------- victory ---------- */
+.victory-top{display:grid;grid-template-columns:1fr 1.1fr 1fr;align-items:end;gap:8px;margin-bottom:-24px;position:relative;z-index:2}
+.victory-top svg{width:100%;max-height:230px}
+.vtitle{text-align:center;color:#fff;margin-bottom:10px}
+.vtitle h2{font-family:'Mountains of Christmas',var(--font-h);font-size:clamp(2.4rem,8vw,4.4rem);line-height:1;text-shadow:0 0 22px rgba(255,214,107,.8),0 5px 0 var(--red-dk)}
+.vtitle p{font-weight:800;color:var(--gold-lt);font-size:1.1rem}
+.rankbadge{display:inline-block;font-family:var(--font-h);font-size:clamp(1.5rem,5vw,2.2rem);color:#4a2d00;padding:10px 26px;border-radius:999px;
+  background:linear-gradient(180deg,#fff0c4,var(--gold) 60%,var(--gold-dk));border:4px solid #fff;box-shadow:0 0 30px rgba(230,194,122,.8);margin:6px 0 4px}
+.total{font-family:var(--font-h);font-size:clamp(2.6rem,9vw,4rem);color:var(--red);line-height:1}
+.total small{font-size:.4em;color:var(--ink-soft)}
+table.sum{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0;border-radius:14px;overflow:hidden;border:3px solid #ead6ac;font-size:1.02rem}
+table.sum th,table.sum td{padding:10px 12px;text-align:left;background:#fff;border-bottom:1px solid #f0e3c8}
+table.sum th{width:48%;color:var(--green-dk);font-weight:900;background:#fbf3e2}
+table.sum tr:last-child th,table.sum tr:last-child td{border-bottom:none}
+.mystery{background:linear-gradient(135deg,#123048,#1f4d74);color:#fff;border-radius:18px;padding:16px 18px;margin:14px 0;border:3px solid var(--gold);line-height:1.6}
+.mystery h4{font-family:var(--font-h);color:var(--gold);font-size:1.25rem;margin-bottom:6px}
+.clue-list{margin:8px 0 0 0;list-style:none;font-size:.95rem}
+.clue-list li{padding:3px 0}
+.actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.submit-status{margin-top:14px;border-radius:14px;padding:12px 14px;font-weight:800;display:none;line-height:1.55}
+.submit-status.show{display:block}
+.submit-status.wait{background:#fff7dd;border:2px solid var(--warn)}
+.submit-status.ok{background:#e3f7ea;border:2px solid var(--ok);color:#0f5a32}
+.submit-status.err{background:#fde5e8;border:2px solid var(--bad);color:#8b1020}
+.spinner{display:inline-block;width:18px;height:18px;border:3px solid #e8c37a;border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;vertical-align:-3px;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.santa-wave{transform-origin:150px 128px;animation:wave 1s ease-in-out infinite alternate}
+@keyframes wave{from{transform:rotate(-8deg)}to{transform:rotate(22deg)}}
+.tree-glow{animation:treeGlow 1.8s ease-in-out infinite alternate}
+@keyframes treeGlow{from{filter:drop-shadow(0 0 4px #ffd56b)}to{filter:drop-shadow(0 0 22px #ffd56b)}}
+.twinkle{animation:blink 1.2s infinite}
+
+
+/* ---------- dashboard ---------- */
+#scr-dash{max-width:1200px}
+.dash-head{padding-right:46px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.dash-head h2{font-family:var(--font-h);color:var(--red);font-size:clamp(1.5rem,4vw,2.1rem)}
+.dash-head small{display:block;color:var(--ink-soft);font-weight:700}
+.dash-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.dash-tools select,.dash-tools input{font:inherit;font-weight:700;font-size:1rem;padding:10px 12px;border-radius:12px;border:3px solid #e2cfa8;background:#fff;min-height:46px}
+.dash-tools input{flex:1;min-width:160px}
+.dash-tools input[type=checkbox]{flex:none;min-width:0}
+.btn.sm{font-size:1rem;padding:10px 18px;min-height:46px;box-shadow:0 4px 0 #5e0614}
+.btn.sm.green{box-shadow:0 4px 0 #0a3d22} .btn.sm.gold{box-shadow:0 4px 0 #7c5c1e}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:12px}
+.tile{background:#fff;border-radius:14px;padding:10px 14px;border:3px solid #ead6ac}
+.tile small{display:block;font-weight:900;color:var(--ink-soft);font-size:.78rem;letter-spacing:1px}
+.tile b{font-family:var(--font-h);font-size:1.7rem;color:var(--green-dk)}
+.rankbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.rankbar span{border-radius:999px;padding:5px 12px;font-weight:800;font-size:.9rem;color:#fff}
+.rk-TIME-MASTER{background:#B8913F}.rk-TIME-EXPERT{background:#14603A}.rk-TIME-EXPLORER{background:#2f5d8a}.rk-TIME-ROOKIE{background:#C8102E}
+.table-wrap{overflow:auto;border-radius:14px;border:3px solid #ead6ac;background:#fff;max-height:70vh}
+table.dash{width:100%;border-collapse:collapse;font-size:.95rem;white-space:nowrap}
+table.dash th{position:sticky;top:0;background:var(--green);color:#fff;padding:10px;text-align:left;cursor:pointer;user-select:none;z-index:1}
+table.dash th:hover{background:var(--green-lt)}
+table.dash td{padding:9px 10px;border-bottom:1px solid #f0e3c8}
+table.dash tr:nth-child(even) td{background:#fffaf0}
+table.dash td.num{text-align:center;font-weight:800}
+table.dash td.tot{color:var(--red);font-family:var(--font-h);font-size:1.1rem}
+table.dash .rk{border-radius:999px;padding:3px 10px;color:#fff;font-weight:800;font-size:.8rem}
+table.dash a{color:var(--red);font-weight:800}
+.dash-empty{padding:30px;text-align:center;font-weight:800;color:var(--ink-soft)}
+.dash-msg{font-weight:800;margin:8px 0}
+.dash-msg.err{color:var(--bad)}
+.link-btn{background:none;color:#fbe9d0;font-weight:800;text-decoration:underline;font-size:1rem;margin-top:14px}
+@media print{
+  body{background:#fff !important}
+  #lights,#snow,#fx,#muteBtn,.dash-tools,.no-print{display:none !important}
+  #app{padding:0}
+  .screen:not(#scr-dash){display:none !important}
+  #scr-dash .card{box-shadow:none;border:none}
+  .table-wrap{max-height:none;overflow:visible;border:none}
+  table.dash{font-size:9pt;white-space:normal}
+  table.dash th{position:static;background:#14603A !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
+/* modal */
+.modal{max-width:440px;width:100%;padding:24px;text-align:center}
+.modal p{font-weight:700;font-size:1.1rem;margin:10px 0 18px;line-height:1.6}
+
+/* ---------- responsive ---------- */
+@media (max-width:720px){
+  .brief{grid-template-columns:1fr}
+  .santa-svg{max-width:150px}
+  .bubble::before{display:none}
+  .scene-strip{flex-direction:column}
+  .scene-strip .pic{width:100%;height:120px}
+  .victory-top{grid-template-columns:1fr 1.3fr 1fr}
+}
+@media (max-width:560px){
+  .options{grid-template-columns:1fr}
+  .opt{min-height:58px;padding:10px 12px}
+  .ring,.ring svg{width:58px;height:58px}
+  .ring .num{font-size:1.4rem}
+  .row2{grid-template-columns:1fr 1fr}
+  .hud .who .nm{max-width:40vw}
+  .scorebox{min-width:92px;padding:5px 10px}
+  .scorebox b{font-size:1.35rem}
+  #app{padding-top:50px}
+  .btn{padding:14px 22px}
+  .progress-row{flex-wrap:wrap;row-gap:6px}
+  .collect{width:100%;justify-content:center;order:3}
+  .collect span{font-size:.95rem}
+  #muteBtn{width:42px;height:42px;font-size:19px;top:38px;right:8px}
+  .hud{padding-right:48px}
+  .scene-strip .pic{height:96px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important}
+}
+</style>
+</head>
+<body>
+<div id="lights"></div>
+<canvas id="snow"></canvas>
+<canvas id="fx"></canvas>
+<button id="muteBtn" aria-label="เปิด/ปิดเสียง" title="เปิด/ปิดเสียง">🔊</button>
+
+<main id="app">
+
+  <!-- ================= REGISTER ================= -->
+  <section id="scr-register" class="screen active">
+    <div class="logo">
+      <svg class="logo-art" viewBox="0 0 300 150" aria-hidden="true">
+        <defs>
+          <radialGradient id="lg1" cx="50%" cy="45%"><stop offset="0" stop-color="#fff8e1"/><stop offset="1" stop-color="#e6c27a"/></radialGradient>
+        </defs>
+        <!-- trees -->
+        <g><polygon points="40,140 70,60 100,140" fill="#14603A"/><polygon points="50,110 70,45 90,110" fill="#2E9A5E"/><circle cx="70" cy="42" r="6" fill="#FFD56B"/></g>
+        <g><polygon points="200,140 230,60 260,140" fill="#14603A"/><polygon points="210,110 230,45 250,110" fill="#2E9A5E"/><circle cx="230" cy="42" r="6" fill="#FFD56B"/></g>
+        <!-- clock -->
+        <circle cx="150" cy="78" r="58" fill="#C8102E" stroke="#E6C27A" stroke-width="7"/>
+        <circle cx="150" cy="78" r="46" fill="url(#lg1)"/>
+        <g stroke="#8E0B20" stroke-width="4" stroke-linecap="round">
+          <line x1="150" y1="40" x2="150" y2="48"/><line x1="150" y1="108" x2="150" y2="116"/>
+          <line x1="112" y1="78" x2="120" y2="78"/><line x1="180" y1="78" x2="188" y2="78"/>
+        </g>
+        <line x1="150" y1="78" x2="150" y2="52" stroke="#2A1A12" stroke-width="5" stroke-linecap="round"/>
+        <line x1="150" y1="78" x2="170" y2="88" stroke="#2A1A12" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="150" cy="78" r="5" fill="#C8102E"/>
+        <path d="M108 30 q42 -30 84 0" fill="none" stroke="#14603A" stroke-width="10" stroke-linecap="round"/>
+        <circle cx="150" cy="16" r="8" fill="#C8102E"/><circle cx="140" cy="20" r="5" fill="#2E9A5E"/><circle cx="160" cy="20" r="5" fill="#2E9A5E"/>
+        <!-- snow ground -->
+        <path d="M0 140 Q75 125 150 140 T300 140 V150 H0Z" fill="#fff"/>
+      </svg>
+      <div class="small">✦ CHRISTMAS ADVENTURE ✦</div>
+      <h1>The Lost Christmas Time</h1>
+      <h2>Save Christmas with Past Simple &amp; Past Continuous!</h2>
+      <p>🎄 ภารกิจกู้เวลาคริสต์มาส สำหรับนักเรียนชั้น ม.2 🎄</p>
+    </div>
+
+    <div class="card pad form-card">
+      <div class="candy-top" style="margin:-26px -36px 18px;margin-left:calc(-1*clamp(16px,4vw,36px));margin-right:calc(-1*clamp(16px,4vw,36px))"></div>
+      <div id="pendingBox" class="pending">
+        ⚠️ พบคะแนนของ <span id="pendingName"></span> ที่ยังส่งให้ครูไม่สำเร็จ
+        <div><button class="btn gold" id="pendingSend">📨 ส่งคะแนนนี้อีกครั้ง</button></div>
+        <div id="pendingMsg" style="margin-top:6px"></div>
+      </div>
+      <h3 class="h-title center" style="color:var(--red);font-size:1.5rem;margin-bottom:14px">🎅 Elf Registration</h3>
+      <form id="regForm" autocomplete="off" novalidate>
+        <div class="field">
+          <label for="fName">ชื่อ-นามสกุล (Full name)</label>
+          <input id="fName" maxlength="80" placeholder="เช่น ด.ญ.นิชา ใจดี">
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label for="fRoom">ห้องเรียน (Class)</label>
+            <input id="fRoom" maxlength="10" placeholder="เช่น ม.2/1">
+          </div>
+          <div class="field">
+            <label for="fNo">เลขที่ (No.)</label>
+            <input id="fNo" maxlength="3" inputmode="numeric" placeholder="เช่น 12">
+          </div>
+        </div>
+        <div class="err-msg" id="regErr"></div>
+        <div class="center"><button type="submit" class="btn pulse" id="startBtn">🎁 START GAME</button></div>
+      </form>
+    </div>
+    <div class="center"><button class="link-btn" id="openDash">📊 ดูตารางคะแนน (Dashboard)</button></div>
+  </section>
+
+  <!-- ================= BRIEFING ================= -->
+  <section id="scr-brief" class="screen">
+    <div class="card pad">
+      <div class="brief">
+        <div class="santa-box" id="briefSanta"></div>
+        <div>
+          <div class="bubble">
+            <b>Ho ho ho! Hello, <span id="briefName"></span>!</b><br>
+            คืนก่อนวันคริสต์มาส <b>นาฬิกาวิเศษ</b> ของฉันหยุดเดิน! ของขวัญทั้งหมดส่งถึงเด็ก ๆ ทั่วโลกไม่ได้เลย 😱<br>
+            ช่วยฉันเดินทางผ่าน <b>2 ด่าน</b> ใช้พลังของ <b>Past Simple</b> และ <b>Past Continuous</b> เพื่อกู้เวลาคริสต์มาสคืนมาที!
+          </div>
+        </div>
+      </div>
+      <div class="map">
+        <div class="map-node">
+          <div class="ico">🎅</div>
+          <div><h4>Level 1: Santa's Christmas Rush</h4><small>📍 Santa's Workshop · 10 ข้อ · 15 วินาที/ข้อ · ข้อละ 10 คะแนน</small></div>
+        </div>
+        <div class="map-node locked" id="mapL2">
+          <div class="ico">🔒</div>
+          <div><h4>Level 2: The Mystery of Christmas Night</h4><small>📍 Frozen Christmas Castle · 10 ข้อ · 25 วินาที/ข้อ · ข้อละ 20 คะแนน</small></div>
+        </div>
+      </div>
+      <div class="rules">
+        <div class="rule">⏱️ หมดเวลา = ข้ามไปข้อถัดไปอัตโนมัติ</div>
+        <div class="rule">👆 เลือกคำตอบได้ครั้งเดียว แก้ไม่ได้</div>
+        <div class="rule">⭐ ด่าน 1 ตอบถูก = ได้ Christmas Star</div>
+        <div class="rule">🔍 ด่าน 2 ตอบถูก = ได้ Mystery Clue</div>
+        <div class="rule">🏆 คะแนนเต็ม 300 คะแนน</div>
+      </div>
+      <div class="center"><button class="btn green pulse" id="acceptBtn">✅ ACCEPT MISSION</button></div>
+    </div>
+  </section>
+
+  <!-- ================= LEVEL INTRO ================= -->
+  <section id="scr-intro" class="screen">
+    <div class="intro">
+      <div class="lv" id="introLv">LEVEL 1</div>
+      <h2 id="introTitle">Santa's Christmas Rush</h2>
+      <div id="introScene"></div>
+      <p class="mission" id="introMission"></p>
+      <div class="chips" id="introChips"></div>
+      <button class="btn gold pulse" id="goBtn">🚀 GO!</button>
+    </div>
+  </section>
+
+  <!-- ================= GAME ================= -->
+  <section id="scr-game" class="screen">
+    <div class="hud">
+      <div class="who"><span class="lvtag" id="hudLv">LEVEL 1</span><span class="nm" id="hudName"></span></div>
+      <div class="scorebox" id="scoreBox"><small>SCORE</small><b id="hudScore">0</b></div>
+    </div>
+    <div class="progress-row">
+      <span id="qCounter">1/10</span>
+      <div class="progress-wrap"><div class="progress-bar" id="progBar"></div></div>
+      <div class="collect" id="collect"></div>
+    </div>
+    <div class="card game-card">
+      <div class="timer-row">
+        <div class="ring" id="ring">
+          <svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="30" fill="#fff" stroke="#e9dcc2" stroke-width="8"/>
+            <circle id="ringArc" cx="35" cy="35" r="30" fill="none" stroke="#2E9A5E" stroke-width="8" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="0"/></svg>
+          <div class="num" id="timeNum">15</div>
+        </div>
+        <div class="energy">
+          <div class="lbl"><span>⚡ TIME ENERGY</span><span id="energyPct">100%</span></div>
+          <div class="bar"><div class="fill" id="energyFill"></div></div>
+        </div>
+      </div>
+      <div id="sceneStrip"></div>
+      <div id="qPrompt" class="qprompt"></div>
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+    </div>
+  </section>
+
+  <!-- ================= LEVEL COMPLETE ================= -->
+  <section id="scr-levelup" class="screen">
+    <div class="card pad lvdone">
+      <div class="biggift"><div class="box"></div><div class="lid"></div><div class="burst">⭐🎉⭐</div></div>
+      <div class="big">LEVEL 1 COMPLETE!</div>
+      <p style="font-weight:800;font-size:1.1rem">เยี่ยมมาก! เอลฟ์เตรียมของขวัญทันเวลาแล้ว 🎁</p>
+      <div class="statgrid">
+        <div class="stat"><small>LEVEL 1 SCORE</small><b id="l1Score">0</b><small>/ 100</small></div>
+        <div class="stat"><small>CHRISTMAS STARS</small><b id="l1Stars">0</b><small>/ 10 ⭐</small></div>
+        <div class="stat"><small>CORRECT</small><b id="l1Correct">0</b></div>
+        <div class="stat"><small>WRONG / TIME'S UP</small><b id="l1Wrong">0</b></div>
+      </div>
+      <div class="unlock">🔓 LEVEL 2 UNLOCKED!</div><br>
+      <button class="btn pulse" id="toL2Btn">🔍 START LEVEL 2</button>
+    </div>
+  </section>
+
+  <!-- ================= VICTORY ================= -->
+  <section id="scr-victory" class="screen">
+    <div class="vtitle">
+      <h2>Merry Christmas!</h2>
+      <p>MISSION COMPLETE · นาฬิกาวิเศษกลับมาเดินอีกครั้งแล้ว!</p>
+    </div>
+    <div class="victory-top">
+      <div id="vTreeL"></div>
+      <div id="vSanta"></div>
+      <div id="vTreeR"></div>
+    </div>
+    <div class="card pad center" style="padding-top:34px">
+      <div class="rankbadge" id="vRank">TIME MASTER</div>
+      <div class="total"><span id="vTotal">0</span><small> / 300</small></div>
+      <table class="sum" id="vTable"></table>
+      <div class="mystery" id="vMystery"></div>
+      <div class="actions">
+        <button class="btn gold" id="submitBtn">📨 SUBMIT SCORE</button>
+        <button class="btn green" id="againBtn">🔄 PLAY AGAIN</button>
+      </div>
+      <button class="link-btn" style="color:var(--green)" id="openDash2">📊 ดูตารางคะแนน (Dashboard)</button>
+      <div class="submit-status" id="submitStatus"></div>
+    </div>
+  </section>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section id="scr-dash" class="screen">
+    <div class="card pad">
+      <div class="dash-head">
+        <div><h2>📊 Score Dashboard</h2><small>Christmas Adventure · Activity Code: Cake28 · <span id="dashUpdated">—</span></small></div>
+        <button class="btn sm green no-print" id="dashBack">⬅ กลับหน้าเกม</button>
+      </div>
+      <div class="dash-tools" id="dashPinRow" style="display:none">
+        <input id="dashPin" type="password" inputmode="numeric" placeholder="ใส่ PIN ของครู">
+        <button class="btn sm gold" id="dashPinGo">เปิดดู</button>
+      </div>
+      <div class="dash-tools">
+        <select id="dashRoom"><option value="">ทุกห้อง</option></select>
+        <input id="dashSearch" placeholder="🔎 ค้นหาชื่อ หรือเลขที่">
+        <label style="font-weight:800;display:flex;align-items:center;gap:6px"><input type="checkbox" id="dashLatest" checked style="min-height:0;width:20px;height:20px"> เฉพาะครั้งล่าสุดของแต่ละคน</label>
+        <button class="btn sm green" id="dashRefresh">🔄 รีเฟรช</button>
+        <button class="btn sm gold" id="dashCsv">⬇ CSV</button>
+        <button class="btn sm" id="dashPrint">🖨️ พิมพ์ / PDF</button>
+      </div>
+      <div class="dash-msg" id="dashMsg"></div>
+      <div class="tiles" id="dashTiles"></div>
+      <div class="rankbar" id="dashRanks"></div>
+      <div class="table-wrap"><table class="dash" id="dashTable"></table></div>
+    </div>
+  </section>
+</main>
+
+<!-- overlays -->
+<div class="overlay" id="fbOverlay"><div class="card fb" id="fbCard"></div></div>
+<div class="overlay" id="countOverlay"><div id="count">3</div></div>
+<div class="overlay" id="confirmOverlay"><div class="card modal">
+  <div style="font-size:48px">🎄</div>
+  <p id="confirmText"></p>
+  <div class="actions"><button class="btn green" id="confirmYes">ใช่</button><button class="btn ghost" id="confirmNo">ยกเลิก</button></div>
+</div></div>
+<div id="wipe"><span>❄️</span></div>
+
+<script>
+/* =========================================================
+   1) SETTINGS — ครูแก้ไขได้เฉพาะส่วนนี้
+   ========================================================= */
+// วาง URL ของ Google Apps Script Web App (ลงท้ายด้วย /exec) ไว้ระหว่างเครื่องหมาย ' '
+// ถ้าเปิดเกมผ่านลิงก์ Web App ของ Apps Script โดยตรง ไม่ต้องใส่ก็ได้ (ระบบเชื่อมต่อให้อัตโนมัติ)
+const SCRIPT_URL = '';
+// รหัสกิจกรรม (ไม่ใช่รหัสผ่าน) — บันทึกอัตโนมัติ นักเรียนไม่ต้องกรอก
+const ACTIVITY_CODE = 'Cake28';
+
+/* =========================================================
+   2) QUESTION BANK
+   tense: 'ps' = Past Simple, 'pc' = Past Continuous
+   ========================================================= */
+const LEVEL1 = [
+  {q:"I ______ TV when my mother called me.", o:["watch","watched","was watching","were watching"], a:"was watching", t:"pc",
+   e:"เหตุการณ์ที่ <b>กำลังทำอยู่</b> (ดูทีวี) แล้วมีเหตุการณ์สั้นแทรกเข้ามา (แม่โทรมา) → ใช้ <b>Past Continuous</b> และประธาน I ใช้ <b>was</b> + V-ing"},
+  {q:"She ______ her homework last night.", o:["was doing","were doing","did","do"], a:"did", t:"ps",
+   e:"เป็นเหตุการณ์ที่ <b>ทำเสร็จสิ้นแล้ว</b> ในอดีต มีคำบอกเวลา <b>last night</b> และไม่มีเหตุการณ์อื่นแทรก → ใช้ <b>Past Simple</b> (do → did)"},
+  {q:"While they ______ football, it started to rain.", o:["played","were playing","was playing","play"], a:"were playing", t:"pc",
+   e:"<b>While</b> + เหตุการณ์ที่กำลังดำเนินอยู่ → <b>Past Continuous</b> และ they ใช้ <b>were</b> + V-ing"},
+  {q:"He ______ his leg while he was running.", o:["broke","was breaking","breaks","break"], a:"broke", t:"ps",
+   e:"ขาหัก เป็นเหตุการณ์สั้น ๆ ที่ <b>แทรกเข้ามา</b> ระหว่างที่กำลังวิ่ง → ใช้ <b>Past Simple</b> (break → broke)"},
+  {q:"We ______ dinner when the lights went out.", o:["had","were having","was having","have"], a:"were having", t:"pc",
+   e:"กำลังกินข้าวอยู่ (เหตุการณ์ยาว) แล้วไฟดับ (เหตุการณ์สั้นหลัง <b>when</b>) → <b>Past Continuous</b>; we ใช้ <b>were</b>"},
+  {q:"The elves ______ toys when Santa walked into the workshop.", o:["were making","was making","made","make"], a:"were making", t:"pc",
+   e:"เอลฟ์ <b>กำลังทำ</b> ของเล่นอยู่ แล้วซานต้าเดินเข้ามา → <b>Past Continuous</b>; the elves (พหูพจน์) ใช้ <b>were</b>"},
+  {q:"Santa ______ all the presents into his sack and tied it with a gold ribbon.", o:["packed","was packing","were packing","packs"], a:"packed", t:"ps",
+   e:"เป็น <b>เหตุการณ์ที่เกิดต่อเนื่องเป็นลำดับ</b> และจบแล้ว (packed → tied) → ใช้ <b>Past Simple</b> ทั้งคู่"},
+  {q:"Rudolph ______ in the stable when the snowball hit the window.", o:["was sleeping","were sleeping","is sleeping","sleeps"], a:"was sleeping", t:"pc",
+   e:"รูดอล์ฟ <b>กำลังนอน</b> อยู่ แล้วก้อนหิมะกระแทกหน้าต่าง → <b>Past Continuous</b>; ประธานเอกพจน์ใช้ <b>was</b>"},
+  {q:"As soon as the bell rang, the children ______ outside to play in the snow.", o:["ran","were running","was running","run"], a:"ran", t:"ps",
+   e:"<b>As soon as</b> = ทันทีที่… เหตุการณ์หนึ่งเกิด แล้วอีกเหตุการณ์เกิดตามทันที → <b>Past Simple</b> (run → ran)"},
+  {q:"At 8 p.m. last night, my sister ______ Christmas cards.", o:["was writing","were writing","is writing","writes"], a:"was writing", t:"pc",
+   e:"ระบุ <b>เวลาที่แน่นอน</b> ในอดีต (At 8 p.m. last night) ว่ากำลังทำอะไรอยู่ ณ ขณะนั้น → <b>Past Continuous</b>; my sister ใช้ <b>was</b>"}
+];
+
+const LEVEL2 = [
+  {scene:"street", loc:"Snowy Christmas Village",
+   s:"Christmas Eve, 9 p.m. Tom left the village party and walked home alone along the snowy street. Suddenly…",
+   q:"Tom was walking home when he ______ a strange noise.", o:["hears","heard","was hearing","were hearing"], a:"heard", t:"ps",
+   e:"Tom <b>was walking</b> = เหตุการณ์ที่กำลังดำเนินอยู่ ส่วนการ <b>ได้ยินเสียง</b> เป็นเหตุการณ์สั้นที่แทรกเข้ามา → <b>Past Simple</b> (hear → heard)"},
+  {scene:"library", loc:"Christmas Library",
+   s:"Detective notes: Two people were at home when the magic clock stopped. Sarah had a big test tomorrow, and her brother loves games.",
+   q:"While Sarah was studying, her brother ______ video games.", o:["played","was playing","were playing","play"], a:"was playing", t:"pc",
+   e:"<b>While</b> เชื่อม 2 เหตุการณ์ที่ <b>เกิดพร้อมกัน</b> และต่อเนื่อง → ใช้ <b>Past Continuous</b> ทั้งสองส่วน; her brother (he) ใช้ <b>was</b>"},
+  {scene:"castle", loc:"Frozen Christmas Castle",
+   s:"Witness report from the castle cook: “Someone called me at 11 p.m., but I couldn't answer. I was in the bathroom!”",
+   q:"The phone rang while I ______ a shower.", o:["took","was taking","take","were taking"], a:"was taking", t:"pc",
+   e:"โทรศัพท์ดัง (เหตุการณ์สั้น) <b>ขณะที่</b> กำลังอาบน้ำ (เหตุการณ์ยาว หลัง while) → <b>Past Continuous</b>; I ใช้ <b>was</b>"},
+  {scene:"forest", loc:"Christmas Tree Forest",
+   s:"On the morning of December 24th, the twins took the forest path to school. They saw a sleigh crash into a big pine tree!",
+   q:"They ______ to school when they saw an accident.", o:["walked","were walking","was walking","walk"], a:"were walking", t:"pc",
+   e:"<b>กำลังเดิน</b> ไปโรงเรียน (เหตุการณ์ยาว) แล้ว <b>เห็น</b> อุบัติเหตุ (เหตุการณ์สั้นหลัง when) → <b>Past Continuous</b>; they ใช้ <b>were</b>"},
+  {scene:"castle", loc:"Frozen Christmas Castle",
+   s:"The castle guard's report: “At midnight I was very tired. I closed my eyes in my big chair… When I woke up, the clock was gone!”",
+   q:"At midnight, the guard ______ in his chair, so he didn't see the thief.", o:["was sleeping","were sleeping","sleeps","is sleeping"], a:"was sleeping", t:"pc",
+   e:"บอก <b>เวลาที่แน่นอน</b> (At midnight) ว่ากำลังทำอะไรอยู่ → <b>Past Continuous</b>; the guard (he) ใช้ <b>was</b> ส่วน sleeps / is sleeping ไม่ใช่รูปอดีต"},
+  {scene:"library", loc:"Christmas Library",
+   s:"The librarian elf always leaves at 10 p.m. Last night she did three things before she left the library.",
+   q:"The librarian elf ______ the door, turned off the lights and went home.", o:["locked","was locking","were locking","locks"], a:"locked", t:"ps",
+   e:"เหตุการณ์ที่ <b>เกิดเรียงต่อกันทีละอย่าง</b> และจบไปแล้ว (locked → turned off → went) → ใช้ <b>Past Simple</b> ทั้งหมด"},
+  {scene:"street", loc:"Mrs. Claus's Cottage",
+   s:"Mrs. Claus's kitchen smelled of gingerbread. She was busy with the oven when…",
+   q:"While Mrs. Claus was baking cookies, someone suddenly ______ on the back door.", o:["knocked","was knocking","were knocking","knocks"], a:"knocked", t:"ps",
+   e:"คำว่า <b>suddenly</b> (ทันใดนั้น) บอกว่าเป็นเหตุการณ์สั้นที่ <b>แทรกเข้ามา</b> ระหว่างที่กำลังอบคุกกี้ → <b>Past Simple</b> (knock → knocked)"},
+  {scene:"lab", loc:"Elves' Snow Lab",
+   s:"In the Snow Lab, all the potions froze in the middle of the experiment. The elves were shocked!",
+   q:"When the magic clock stopped, the elves ______ an experiment.", o:["were doing","was doing","did","do"], a:"were doing", t:"pc",
+   e:"เอลฟ์ <b>กำลังทำการทดลองอยู่ตรงกลาง</b> แล้วนาฬิกาหยุด (เหตุการณ์สั้นหลัง when) → <b>Past Continuous</b>; the elves ใช้ <b>were</b>"},
+  {scene:"stable", loc:"Reindeer Stable", long:true,
+   s:"The stable keeper wrote in her notebook: “The elves gave the reindeer carrots at 11 p.m. At that moment, a dark shadow flew over the roof.”",
+   q:"Which sentence is correct?", o:[
+     "While the elves were feeding the reindeer, a shadow flew over the stable.",
+     "While the elves was feeding the reindeer, a shadow flew over the stable.",
+     "While the elves feeding the reindeer, a shadow flew over the stable.",
+     "While the elves were feed the reindeer, a shadow flew over the stable."],
+   a:"While the elves were feeding the reindeer, a shadow flew over the stable.", t:"pc",
+   e:"โครงสร้าง Past Continuous = <b>was/were + V-ing</b>; the elves เป็นพหูพจน์ต้องใช้ <b>were</b> และต้องมี V-ing (feeding) ส่วนเหตุการณ์ที่แทรกใช้ Past Simple (flew)"},
+  {scene:"bridge", loc:"Candy Cane Bridge", long:true,
+   s:"The last witness lives next to the Candy Cane Bridge. She heard footsteps, so she went to the window…",
+   q:"Which sentence is correct?", o:[
+     "When I looked outside, a man in a blue coat was running across the bridge.",
+     "When I looked outside, a man in a blue coat were running across the bridge.",
+     "When I was look outside, a man in a blue coat ran across the bridge.",
+     "When I look outside, a man in a blue coat was run across the bridge."],
+   a:"When I looked outside, a man in a blue coat was running across the bridge.", t:"pc",
+   e:"<b>When + Past Simple</b> (looked) บอกช่วงเวลาที่มองออกไป แล้วเห็นชายคนนั้น <b>กำลังวิ่งอยู่</b> → <b>was running</b> (a man = เอกพจน์ ใช้ was)"}
+];
+
+const CLUES = [
+  "❄️ Icy footprints led out of the castle.",
+  "🧣 A long blue scarf was found on the Candy Cane Bridge.",
+  "🌙 The thief came while everyone was sleeping.",
+  "🧊 Everything the thief touched turned to ice.",
+  "🦌 The reindeer saw a shadow flying over the stable.",
+  "📜 A note said: “Winter should never end!”",
+  "🌲 Frost patterns covered the tallest Christmas tree.",
+  "🔔 A silver bell was ringing deep in the forest.",
+  "🗝️ The magic clock was ticking inside a frozen cave.",
+  "🔎 The thief's name starts with the letter “J”…"
+];
+
+const LEVELS = {
+  1:{bank:LEVEL1, time:15, pts:10, name:"Santa's Christmas Rush", scene:"workshop",
+     mission:"ภารกิจ: ช่วยเอลฟ์เตรียมของขวัญให้ทันก่อนเที่ยงคืน! เลือกคำตอบที่ถูกต้องเพื่อเปิดกล่องของขวัญและสะสม Christmas Star ⭐",
+     chips:["📍 Santa's Workshop","📝 10 ข้อ","⏱️ 15 วินาที/ข้อ","🎯 ถูกได้ 10 คะแนน"]},
+  2:{bank:LEVEL2, time:25, pts:20, name:"The Mystery of Christmas Night", scene:"castle",
+     mission:"ภารกิจ: นาฬิกาวิเศษหายไปจากปราสาทน้ำแข็ง! อ่านรายงานพยาน วิเคราะห์ประโยค และเก็บ Mystery Clue 🔍 เพื่อหาตัวคนร้าย",
+     chips:["📍 Frozen Christmas Castle","📝 10 ข้อ","⏱️ 25 วินาที/ข้อ","🎯 ถูกได้ 20 คะแนน"]}
+};
+
+/* =========================================================
+   3) SVG ART (original illustrations)
+   ========================================================= */
+function santaSVG(wave){
+  return `<svg class="santa-svg" viewBox="0 0 220 240" aria-label="Santa Claus">
+  <ellipse cx="110" cy="232" rx="70" ry="7" fill="rgba(0,0,0,.25)"/>
+  <!-- body -->
+  <path d="M50 228 Q48 150 110 140 Q172 150 170 228Z" fill="#C8102E"/>
+  <rect x="104" y="150" width="12" height="78" fill="#fff"/>
+  <rect x="52" y="186" width="116" height="16" fill="#2A1A12"/>
+  <rect x="98" y="183" width="24" height="22" rx="3" fill="none" stroke="#E6C27A" stroke-width="5"/>
+  <!-- left arm -->
+  <path d="M58 160 Q30 185 44 212" stroke="#C8102E" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <circle cx="45" cy="214" r="11" fill="#14603A"/>
+  <!-- right arm (waving) -->
+  <g class="${wave?'santa-wave':''}" style="transform-origin:160px 158px">
+    <path d="M160 160 Q190 140 196 106" stroke="#C8102E" stroke-width="22" fill="none" stroke-linecap="round"/>
+    <rect x="184" y="112" width="24" height="10" rx="5" fill="#fff" transform="rotate(-70 196 117)"/>
+    <circle cx="198" cy="96" r="12" fill="#14603A"/>
+  </g>
+  <!-- face -->
+  <circle cx="110" cy="96" r="38" fill="#F8C9A0"/>
+  <path d="M68 100 Q72 160 110 168 Q148 160 152 100 Q140 120 110 118 Q80 120 68 100Z" fill="#fff"/>
+  <path d="M88 116 Q110 104 132 116 Q120 126 110 120 Q100 126 88 116Z" fill="#fff" stroke="#eee"/>
+  <circle cx="96" cy="92" r="5" fill="#2A1A12"/><circle cx="124" cy="92" r="5" fill="#2A1A12"/>
+  <circle cx="98" cy="90" r="1.6" fill="#fff"/><circle cx="126" cy="90" r="1.6" fill="#fff"/>
+  <circle cx="110" cy="104" r="7" fill="#E88B7A"/>
+  <circle cx="84" cy="104" r="6" fill="#F2A08F" opacity=".6"/><circle cx="136" cy="104" r="6" fill="#F2A08F" opacity=".6"/>
+  <path d="M84 80 q12-8 22 0 M114 80 q12-8 22 0" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- hat -->
+  <path d="M70 72 Q92 14 150 26 Q176 34 182 64 L160 60 Q148 44 140 66Z" fill="#C8102E"/>
+  <rect x="64" y="62" width="94" height="20" rx="10" fill="#fff"/>
+  <circle cx="184" cy="66" r="12" fill="#fff"/>
+  </svg>`;
+}
+function treeSVG(id){
+  return `<svg viewBox="0 0 120 200" class="tree-glow" aria-hidden="true">
+  <rect x="52" y="168" width="16" height="24" fill="#6B3E1E"/>
+  <polygon points="60,20 110,170 10,170" fill="#14603A"/>
+  <polygon points="60,20 98,120 22,120" fill="#2E9A5E"/>
+  <polygon points="60,20 86,74 34,74" fill="#3cb874"/>
+  <path d="M30 150 Q60 130 95 148 M34 100 Q60 86 88 100" stroke="#E6C27A" stroke-width="3" fill="none"/>
+  <circle class="twinkle" cx="40" cy="150" r="5" fill="#ff3b4f"/><circle class="twinkle" style="animation-delay:.5s" cx="78" cy="140" r="5" fill="#ffd56b"/>
+  <circle class="twinkle" style="animation-delay:.9s" cx="55" cy="108" r="5" fill="#fff"/><circle class="twinkle" style="animation-delay:.3s" cx="76" cy="96" r="4" fill="#ff3b4f"/>
+  <circle class="twinkle" style="animation-delay:.7s" cx="50" cy="70" r="4" fill="#4ce38b"/>
+  <polygon points="60,4 65,16 78,16 68,24 72,37 60,29 48,37 52,24 42,16 55,16" fill="#FFD56B"/>
+  </svg>`;
+}
+function sky(){
+  return `<defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b2240"/><stop offset="1" stop-color="#1f4d74"/></linearGradient></defs>
+  <rect width="200" height="120" fill="url(#skyG)"/>
+  <circle cx="170" cy="22" r="11" fill="#fff6d5"/><circle cx="165" cy="19" r="10" fill="#0f2a4c" opacity=".2"/>
+  <g fill="#fff"><circle cx="20" cy="14" r="1.2"/><circle cx="60" cy="24" r="1"/><circle cx="110" cy="10" r="1.3"/><circle cx="140" cy="34" r="1"/><circle cx="35" cy="40" r="1"/></g>`;
+}
+function ground(){return `<path d="M0 100 Q50 92 100 100 T200 98 V120 H0Z" fill="#fff"/>`;}
+const SCENES = {
+  workshop:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="200" height="120" fill="#7a3b1c"/>
+    <g stroke="#5e2c13" stroke-width="2">${[20,40,60,80,100].map(y=>`<line x1="0" y1="${y}" x2="200" y2="${y}"/>`).join('')}</g>
+    <rect x="12" y="14" width="46" height="34" rx="4" fill="#0b2240"/><rect x="12" y="14" width="46" height="34" rx="4" fill="none" stroke="#E6C27A" stroke-width="3"/>
+    <g fill="#fff"><circle cx="22" cy="24" r="1.4"/><circle cx="44" cy="34" r="1.4"/><circle cx="32" cy="40" r="1"/></g>
+    <path d="M70 6 Q100 22 130 6 Q160 22 190 6" stroke="#2E9A5E" stroke-width="4" fill="none"/>
+    <circle cx="85" cy="12" r="3" fill="#ff3b4f"/><circle cx="115" cy="12" r="3" fill="#ffd56b"/><circle cx="145" cy="12" r="3" fill="#4ce38b"/><circle cx="175" cy="12" r="3" fill="#ff3b4f"/>
+    <rect x="0" y="86" width="200" height="34" fill="#4a230f"/>
+    <rect x="20" y="64" width="34" height="26" fill="#C8102E"/><rect x="34" y="64" width="6" height="26" fill="#E6C27A"/>
+    <rect x="62" y="56" width="28" height="34" fill="#14603A"/><rect x="73" y="56" width="6" height="34" fill="#fff"/>
+    <rect x="98" y="70" width="40" height="20" fill="#E6C27A"/><rect x="115" y="70" width="6" height="20" fill="#C8102E"/>
+    <rect x="146" y="60" width="30" height="30" fill="#2f5d8a"/><rect x="158" y="60" width="6" height="30" fill="#ffd56b"/>
+    <circle cx="186" cy="52" r="8" fill="#3cb874"/><polygon points="180,46 186,30 192,46" fill="#C8102E"/>
+  </svg>`,
+  castle:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">${sky()}
+    <g fill="#bfe3f7" stroke="#e8f7ff" stroke-width="1.5">
+      <rect x="60" y="50" width="80" height="52"/><rect x="40" y="36" width="24" height="66"/><rect x="136" y="36" width="24" height="66"/><rect x="88" y="26" width="24" height="76"/>
+      <polygon points="40,36 52,14 64,36"/><polygon points="136,36 148,14 160,36"/><polygon points="88,26 100,2 112,26"/>
+    </g>
+    <path d="M90 102 V82 Q100 70 110 82 V102Z" fill="#1f4d74"/>
+    <rect x="47" y="52" width="10" height="12" fill="#ffd56b"/><rect x="143" y="52" width="10" height="12" fill="#ffd56b"/><circle cx="100" cy="44" r="6" fill="#1f4d74" stroke="#E6C27A" stroke-width="2"/>
+    <text x="100" y="47.5" font-size="8" text-anchor="middle" fill="#E6C27A">?</text>${ground()}</svg>`,
+  forest:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">${sky()}
+    ${[[20,1],[55,1.3],[95,.9],[130,1.4],[170,1.1]].map(([x,s])=>`<g transform="translate(${x} ${100}) scale(${s})"><polygon points="0,-62 22,0 -22,0" fill="#14603A"/><polygon points="0,-62 15,-28 -15,-28" fill="#2E9A5E"/><path d="M-12 -30 L0 -40 L12 -30 M-18 -6 L0 -18 L18 -6" stroke="#fff" stroke-width="3" fill="none"/></g>`).join('')}
+    <path d="M70 108 l12 -8 l20 0 l8 8z" fill="#C8102E"/><path d="M68 110 h46" stroke="#E6C27A" stroke-width="3"/>${ground()}</svg>`,
+  library:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="200" height="120" fill="#3b2416"/>
+    ${[12,46,80].map(y=>`<rect x="8" y="${y}" width="184" height="4" fill="#6B3E1E"/>`).join('')}
+    ${[0,1,2].map(r=>Array.from({length:14},(_,i)=>{const c=['#C8102E','#14603A','#E6C27A','#2f5d8a','#8E0B20','#2E9A5E'][(i+r)%6];const h=22+((i*7+r*3)%8);return `<rect x="${12+i*13}" y="${12+r*34+30-h-4+4}" width="10" height="${h}" fill="${c}"/>`}).join('')).join('')}
+    <rect x="0" y="100" width="200" height="20" fill="#5e2c13"/>
+    <circle cx="160" cy="98" r="10" fill="#ffd56b" opacity=".85"/><rect x="157" y="98" width="6" height="12" fill="#E6C27A"/>
+  </svg>`,
+  street:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">${sky()}
+    ${[[10,'#C8102E'],[62,'#14603A'],[118,'#2f5d8a']].map(([x,c])=>`<g><rect x="${x}" y="58" width="44" height="42" fill="${c}"/><polygon points="${x-4},60 ${x+22},36 ${x+48},60" fill="#fff"/><rect x="${x+8}" y="68" width="10" height="10" fill="#ffd56b"/><rect x="${x+26}" y="68" width="10" height="10" fill="#ffd56b"/><rect x="${x+16}" y="84" width="12" height="16" fill="#3b2416"/></g>`).join('')}
+    <rect x="176" y="50" width="4" height="50" fill="#2A1A12"/><circle cx="178" cy="48" r="7" fill="#ffd56b" opacity=".9"/>
+    <path d="M176 70 h-6 v8 h6" fill="#C8102E"/>${ground()}</svg>`,
+  lab:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="200" height="120" fill="#16354f"/>
+    <rect x="0" y="80" width="200" height="40" fill="#cfe9f7"/><rect x="0" y="78" width="200" height="6" fill="#E6C27A"/>
+    <path d="M30 78 V48 h12 v30" fill="#bfe3f7" stroke="#fff" stroke-width="2"/><rect x="31" y="62" width="10" height="16" fill="#4ce38b"/>
+    <path d="M70 78 l10 -26 v-12 h10 v12 l10 26z" fill="#fde5e8" stroke="#fff" stroke-width="2"/><path d="M73 78 l7 -14 h20 l7 14z" fill="#ff5a6e"/>
+    <circle cx="140" cy="62" r="16" fill="#bfe3f7" stroke="#fff" stroke-width="2"/><rect x="136" y="38" width="8" height="10" fill="#bfe3f7"/><path d="M126 66 a14 14 0 0 0 28 0z" fill="#ffd56b"/>
+    <g fill="#fff" opacity=".9"><circle cx="40" cy="20" r="3"/><circle cx="100" cy="14" r="2"/><circle cx="170" cy="24" r="3"/></g>
+    <text x="172" y="74" font-size="22">❄️</text></svg>`,
+  stable:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">${sky()}
+    <rect x="40" y="50" width="120" height="52" fill="#8E0B20"/><polygon points="32,52 100,18 168,52" fill="#5e0614"/><path d="M32 52 L100 18 L168 52" stroke="#fff" stroke-width="5" fill="none"/>
+    <rect x="80" y="64" width="40" height="38" fill="#3b2416"/><path d="M80 64 L120 102 M120 64 L80 102" stroke="#E6C27A" stroke-width="3"/>
+    <path d="M120 30 q20 -14 40 -4 q-10 2 -16 10z" fill="#0b1626" opacity=".85"/>
+    <g transform="translate(150 88)"><ellipse cx="0" cy="0" rx="14" ry="8" fill="#8a5a3b"/><circle cx="14" cy="-8" r="6" fill="#8a5a3b"/><circle cx="19" cy="-8" r="2" fill="#ff3b4f"/><path d="M12 -14 l-3 -8 m3 8 l4 -8" stroke="#5e3a22" stroke-width="2"/></g>${ground()}</svg>`,
+  bridge:()=>`<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice">${sky()}
+    <rect x="0" y="92" width="200" height="28" fill="#9fd3ef"/>
+    <path d="M10 92 Q100 30 190 92" stroke="#fff" stroke-width="10" fill="none"/>
+    <path d="M10 92 Q100 30 190 92" stroke="#C8102E" stroke-width="10" fill="none" stroke-dasharray="10 10"/>
+    ${[30,60,100,140,170].map(x=>`<line x1="${x}" y1="${92-(1-Math.pow((x-100)/90,2))*31}" x2="${x}" y2="92" stroke="#fff" stroke-width="3"/>`).join('')}
+    <g transform="translate(118 50)"><circle r="5" fill="#F8C9A0"/><path d="M-6 4 h12 l3 16 h-18z" fill="#2f5d8a"/><path d="M-6 6 q-10 4 -16 0" stroke="#3a7bd5" stroke-width="3" fill="none"/></g></svg>`
+};
+function scene(key){return (SCENES[key]||SCENES.castle)();}
+
+/* =========================================================
+   4) SOUND (Web Audio — no files needed)
+   ========================================================= */
+const Snd = (()=>{
+  let ctx=null, muted=false;
+  try{ muted = localStorage.getItem('xmasAdv_muted')==='1'; }catch(e){}
+  function ac(){
+    if(!ctx){ const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; ctx=new C(); }
+    if(ctx.state==='suspended') ctx.resume();
+    return ctx;
+  }
+  function tone(f, at, dur, type='sine', vol=.15){
+    if(muted) return; const c=ac(); if(!c) return;
+    const t=c.currentTime+at, o=c.createOscillator(), g=c.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol,t+0.015); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t+dur+.05);
+  }
+  function bell(f,at,vol=.12){ tone(f,at,1.1,'sine',vol); tone(f*2.01,at,.7,'sine',vol*.4); tone(f*3.02,at,.4,'sine',vol*.2); }
+  return {
+    get muted(){return muted},
+    toggle(){ muted=!muted; try{localStorage.setItem('xmasAdv_muted',muted?'1':'0')}catch(e){} if(!muted) this.click(); return muted; },
+    unlock(){ ac(); },
+    click(){ tone(740,0,.07,'square',.05); tone(990,.04,.06,'square',.04); },
+    correct(){ [784,988,1175,1568].forEach((f,i)=>tone(f,i*.07,.22,'triangle',.13)); bell(2093,.3,.08); },
+    wrong(){ tone(260,0,.22,'sawtooth',.07); tone(196,.18,.35,'sawtooth',.07); },
+    tick(){ tone(1200,0,.05,'square',.045); },
+    timeup(){ [660,520,390].forEach((f,i)=>tone(f,i*.14,.2,'square',.07)); },
+    level(){ [523,659,784,1047,784,1047].forEach((f,i)=>bell(f,i*.15,.09)); },
+    count(){ tone(880,0,.15,'triangle',.12); },
+    go(){ tone(1320,0,.3,'triangle',.14); bell(1760,.05,.08); },
+    victory(){ [523,523,784,784,880,880,784,698,698,659,659,587,587,523].forEach((f,i)=>bell(f,i*.17,.07)); },
+    whoosh(){ if(muted) return; const c=ac(); if(!c) return; const t=c.currentTime; const o=c.createOscillator(), g=c.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(200,t); o.frequency.exponentialRampToValueAtTime(1400,t+.5);
+      g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.08,t+.1); g.gain.exponentialRampToValueAtTime(.0001,t+.6);
+      o.connect(g).connect(c.destination); o.start(t); o.stop(t+.65); }
+  };
+})();
+
+/* =========================================================
+   5) HELPERS
+   ========================================================= */
+const $ = id => document.getElementById(id);
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }
+function wipe(cb){ const w=$('wipe'); w.classList.remove('go'); void w.offsetWidth; w.classList.add('go'); Snd.whoosh(); setTimeout(cb,520); setTimeout(()=>w.classList.remove('go'),1150); }
+function fmtTime(ms){ const s=Math.round(ms/1000); const m=Math.floor(s/60); return m>0? `${m} นาที ${s%60} วินาที` : `${s} วินาที`; }
+function rankOf(t){ return t>=270?'TIME MASTER':t>=240?'TIME EXPERT':t>=180?'TIME EXPLORER':'TIME ROOKIE'; }
+function uid(){ try{ if(crypto.randomUUID) return crypto.randomUUID(); }catch(e){} return 'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10); }
+const store = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const PENDING_KEY='xmasAdv_pending_'+ACTIVITY_CODE;
+function confirmBox(text){ return new Promise(res=>{ $('confirmText').textContent=text; $('confirmOverlay').classList.add('show');
+  const done=v=>{ $('confirmOverlay').classList.remove('show'); $('confirmYes').onclick=$('confirmNo').onclick=null; Snd.click(); res(v); };
+  $('confirmYes').onclick=()=>done(true); $('confirmNo').onclick=()=>done(false); }); }
+
+/* string lights */
+(function(){ const n=Math.max(10,Math.floor(window.innerWidth/48)); let h=''; for(let i=0;i<n;i++) h+=`<span class="bulb c${i%4}"></span>`; $('lights').innerHTML=h; })();
+
+/* =========================================================
+   6) SNOW + FIREWORKS
+   ========================================================= */
+(function snow(){
+  const cv=$('snow'), cx=cv.getContext('2d'); let W,H,flakes=[];
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){ W=cv.width=innerWidth; H=cv.height=innerHeight; const n=reduce?25:Math.min(110,Math.floor(W*H/14000));
+    flakes=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.6+.8,s:Math.random()*.7+.3,d:Math.random()*Math.PI*2})); }
+  size(); addEventListener('resize',size);
+  (function loop(){ cx.clearRect(0,0,W,H); cx.fillStyle='rgba(255,255,255,.85)';
+    for(const f of flakes){ f.y+=f.s; f.d+=.01; f.x+=Math.sin(f.d)*.4; if(f.y>H+5){f.y=-5;f.x=Math.random()*W;} cx.beginPath(); cx.arc(f.x,f.y,f.r,0,7); cx.fill(); }
+    requestAnimationFrame(loop); })();
+})();
+const FX=(()=>{
+  const cv=$('fx'), cx=cv.getContext('2d'); let parts=[], running=false, fwTimer=null;
+  function size(){ cv.width=innerWidth; cv.height=innerHeight; } size(); addEventListener('resize',size);
+  const cols=['#ff3b4f','#ffd56b','#4ce38b','#ffffff','#E6C27A','#7fd3ff'];
+  function burst(x,y,n=60,spd=5,emoji){ for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2, v=Math.random()*spd+1;
+      parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:1,c:cols[i%cols.length],r:Math.random()*3+2,emoji:emoji&&i%6===0?emoji:null}); } run(); }
+  function run(){ if(running) return; running=true; (function loop(){ cx.clearRect(0,0,cv.width,cv.height);
+      parts=parts.filter(p=>p.life>0); for(const p of parts){ p.x+=p.vx; p.y+=p.vy; p.vy+=.06; p.vx*=.99; p.life-=.012;
+        cx.globalAlpha=Math.max(0,p.life); if(p.emoji){ cx.font='20px serif'; cx.fillText(p.emoji,p.x,p.y);} else { cx.fillStyle=p.c; cx.beginPath(); cx.arc(p.x,p.y,p.r,0,7); cx.fill(); } }
+      cx.globalAlpha=1; if(parts.length) requestAnimationFrame(loop); else { running=false; cx.clearRect(0,0,cv.width,cv.height);} })(); }
+  return {
+    burst,
+    fireworks(sec=6){ clearInterval(fwTimer); let t=0; fwTimer=setInterval(()=>{ burst(Math.random()*innerWidth*.8+innerWidth*.1, Math.random()*innerHeight*.4+60, 70, 6); if((t+=0.6)>sec) clearInterval(fwTimer); },600); },
+    stop(){ clearInterval(fwTimer); parts=[]; }
+  };
+})();
+
+/* =========================================================
+   7) GAME STATE
+   ========================================================= */
+let S = null;
+function newState(player){
+  return { player, level:1, qs:[], idx:0, score:{1:0,2:0}, correct:0, wrong:0, timeout:0,
+    timeUsedMs:0, stars:0, clues:[], log:[], answered:true, timer:null, autoNext:null, advancing:false,
+    qStart:0, limitMs:15000, lastTickSec:null, payload:null, submitting:false, submitted:false, startedAt:new Date() };
+}
+
+/* ---------- registration ---------- */
+$('regForm').addEventListener('submit', e=>{
+  e.preventDefault(); Snd.unlock(); Snd.click();
+  const f={name:$('fName'),room:$('fRoom'),no:$('fNo')};
+  Object.values(f).forEach(i=>i.classList.remove('err'));
+  const name=f.name.value.trim().replace(/\s+/g,' '), room=f.room.value.trim().replace(/\s+/g,''), no=f.no.value.trim();
+  const miss=[];
+  if(name.length<2) miss.push(f.name);
+  if(!room) miss.push(f.room);
+  if(!/^\d{1,3}$/.test(no) || +no<1) miss.push(f.no);
+  if(miss.length){ miss.forEach(i=>{ void i.offsetWidth; i.classList.add('err'); }); miss[0].focus();
+    $('regErr').textContent = miss.includes(f.no)&&no&&miss.length===1 ? '⚠️ เลขที่ต้องเป็นตัวเลขเท่านั้น' : '⚠️ กรุณากรอกข้อมูลให้ครบทั้ง 3 ช่องก่อนเริ่มเกม'; Snd.wrong(); return; }
+  $('regErr').textContent='';
+  S = newState({name, room, no:String(+no)});
+  $('briefName').textContent=name; $('briefSanta').innerHTML=santaSVG(true);
+  $('mapL2').classList.add('locked'); $('mapL2').querySelector('.ico').textContent='🔒';
+  wipe(()=>show('scr-brief'));
+});
+$('acceptBtn').onclick=()=>{ Snd.click(); wipe(()=>openLevel(1)); };
+
+/* ---------- level intro ---------- */
+function openLevel(lv){
+  S.level=lv; S.idx=0; const L=LEVELS[lv];
+  S.qs = shuffle(L.bank).map(q=>({...q, opts:shuffle(q.o)}));
+  $('introLv').textContent='LEVEL '+lv; $('introTitle').textContent=(lv===1?'🎅 ':'🔍 ')+L.name;
+  $('introScene').innerHTML=`<div class="scene-big">${scene(L.scene)}</div>`;
+  $('introMission').textContent=L.mission;
+  $('introChips').innerHTML=L.chips.map(c=>`<span class="chip">${esc(c)}</span>`).join('');
+  show('scr-intro');
+}
+$('goBtn').onclick=()=>{
+  Snd.click(); const ov=$('countOverlay'), c=$('count'); ov.classList.add('show'); let n=3;
+  const step=()=>{ c.textContent = n>0? n : 'GO!'; c.classList.remove('anim'); void c.offsetWidth; c.classList.add('anim'); n>0?Snd.count():Snd.go();
+    if(n-- > 0) setTimeout(step,800); else setTimeout(()=>{ ov.classList.remove('show'); startLevel(); },650); };
+  step();
+};
+function startLevel(){
+  const L=LEVELS[S.level];
+  $('hudLv').textContent='LEVEL '+S.level; $('hudName').textContent=`${S.player.name} · ${S.player.room} · เลขที่ ${S.player.no}`;
+  $('collect').innerHTML = Array.from({length:10},()=>`<span>${S.level===1?'⭐':'🔍'}</span>`).join('');
+  updateScore(false); show('scr-game'); renderQuestion();
+}
+
+/* ---------- question ---------- */
+function renderQuestion(){
+  const L=LEVELS[S.level], q=S.qs[S.idx];
+  S.answered=false; S.advancing=false;
+  $('qCounter').textContent=`${S.idx+1}/10`;
+  $('progBar').style.width=(S.idx/10*100)+'%';
+  if(S.level===2){
+    $('sceneStrip').innerHTML=`<div class="scene-strip"><div class="pic">${scene(q.scene)}</div><div class="txt">
+      <div class="case-no">🕵️ CASE FILE #${S.idx+1}</div><span class="loc">📍 ${esc(q.loc)}</span><div class="story">${esc(q.s)}</div></div></div>`;
+  } else $('sceneStrip').innerHTML='';
+  const isChoose = q.q.indexOf('______')<0;
+  $('qPrompt').textContent = isChoose? '' : 'Choose the correct answer to complete the sentence.';
+  $('question').innerHTML = isChoose? esc(q.q) : esc(q.q).replace('______','<span class="blank" id="blank">______</span>');
+  const box=$('options'); box.className='options'+(q.long?' long':'');
+  box.innerHTML = q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="key">${'ABCD'[i]}</span><span>${esc(o)}</span></button>`).join('');
+  box.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>answer(+b.dataset.i),{once:true}));
+  startTimer(L.time*1000);
+}
+
+/* ---------- timer ---------- */
+function startTimer(ms){
+  stopTimer(); S.limitMs=ms; S.qStart=performance.now(); S.lastTickSec=null; drawTimer(ms);
+  S.timer=setInterval(()=>{
+    const rem=Math.max(0,S.limitMs-(performance.now()-S.qStart)); drawTimer(rem);
+    const sec=Math.ceil(rem/1000);
+    if(sec<=5 && sec>0 && sec!==S.lastTickSec){ S.lastTickSec=sec; Snd.tick(); }
+    if(rem<=0) timeUp();
+  },100);
+}
+function stopTimer(){ if(S&&S.timer){ clearInterval(S.timer); S.timer=null; } }
+function drawTimer(rem){
+  const p=rem/S.limitMs, sec=Math.ceil(rem/1000);
+  $('timeNum').textContent=sec;
+  $('ringArc').setAttribute('stroke-dashoffset', (188.5*(1-p)).toFixed(1));
+  const col = p>.5?'#2E9A5E':p>.25?'#E89A1B':'#D6243B';
+  $('ringArc').setAttribute('stroke',col);
+  $('ring').classList.toggle('danger', sec<=5);
+  const f=$('energyFill'); f.style.width=(p*100)+'%'; f.className='fill'+(p>.5?'':p>.25?' mid':' low');
+  $('energyPct').textContent=Math.ceil(p*100)+'%';
+}
+
+/* ---------- answering ---------- */
+function lockOptions(){ $('options').querySelectorAll('.opt').forEach(b=>b.disabled=true); }
+function answer(i){
+  if(S.answered) return; S.answered=true;
+  const used=Math.min(S.limitMs, performance.now()-S.qStart);
+  stopTimer(); lockOptions();
+  const q=S.qs[S.idx], chosen=q.opts[i], ok = chosen===q.a, L=LEVELS[S.level];
+  S.timeUsedMs+=used;
+  const btns=$('options').querySelectorAll('.opt');
+  btns.forEach((b,k)=>{ if(q.opts[k]===q.a) b.classList.add('correct'); else if(k===i) b.classList.add('wrong'); else b.classList.add('dim'); });
+  const blank=$('blank'); if(blank){ blank.textContent=q.a; blank.classList.add('filled'); }
+  let clue=null;
+  if(ok){ S.correct++; S.score[S.level]+=L.pts; Snd.correct(); updateScore(true);
+    if(S.level===1){ S.stars++; } else { clue=CLUES[S.clues.length]; S.clues.push(clue); }
+    lightCollect();
+    const r=btns[i].getBoundingClientRect(); FX.burst(r.left+r.width/2, r.top+r.height/2, 40, 5, S.level===1?'⭐':'❄️');
+  } else { S.wrong++; Snd.wrong(); }
+  S.log.push({lv:S.level, q:q.q, chosen, correct:q.a, result: ok?'correct':'wrong', tense:q.t, sec:Math.round(used/100)/10});
+  setTimeout(()=>showFeedback(ok?'ok':'bad', q, clue), 650);
+}
+function timeUp(){
+  if(S.answered) return; S.answered=true;
+  stopTimer(); lockOptions(); drawTimer(0);
+  const q=S.qs[S.idx]; S.timeout++; S.timeUsedMs+=S.limitMs; Snd.timeup();
+  $('options').querySelectorAll('.opt').forEach((b,k)=>{ if(q.opts[k]===q.a) b.classList.add('correct'); else b.classList.add('dim'); });
+  const blank=$('blank'); if(blank){ blank.textContent=q.a; blank.classList.add('filled'); }
+  S.log.push({lv:S.level, q:q.q, chosen:'(time up)', correct:q.a, result:'timeout', tense:q.t, sec:S.limitMs/1000});
+  setTimeout(()=>showFeedback('time', q, null), 500);
+}
+function lightCollect(){ const got = S.level===1? S.stars : S.clues.length; $('collect').querySelectorAll('span').forEach((s,k)=>s.classList.toggle('on',k<got)); }
+function updateScore(bump){ const total=S.score[1]+S.score[2]; $('hudScore').textContent=total; if(bump){ const b=$('scoreBox'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); } }
+
+function showFeedback(kind, q, clue){
+  const L=LEVELS[S.level], last = S.idx===9;
+  const tenseTag = q.t==='ps'?'PAST SIMPLE':'PAST CONTINUOUS';
+  let head='';
+  if(kind==='ok') head = S.level===1? `<div class="gift"><div class="box"></div><div class="lid"></div><div class="star">⭐</div></div><h3>AWESOME! Correct Answer!</h3><div class="pts">+${L.pts} points · +1 Christmas Star ⭐</div>`
+                                     : `<div class="bigicon">🔍</div><h3>AWESOME! Correct Answer!</h3><div class="pts">+${L.pts} points · New clue found!</div>`;
+  else if(kind==='bad') head=`<div class="bigicon">☃️</div><h3>OOPS! Try the next one!</h3><div class="pts" style="color:#999">+0 points</div>`;
+  else head=`<div class="bigicon">⏰</div><h3>TIME'S UP!</h3><div class="pts" style="color:#999">+0 points</div>`;
+  const ansLine = kind==='ok' ? '' : `<div class="ans">✅ Correct answer: <b>${esc(q.a)}</b></div>`;
+  const clueBox = clue? `<div class="clue"><small>🗝️ MYSTERY CLUE ${S.clues.length}/10</small>${esc(clue)}</div>`:'';
+  const auto = kind==='time'? `<div class="auto"><i id="autoBar"></i></div>`:'';
+  $('fbCard').className='card fb '+kind;
+  $('fbCard').innerHTML = `${head}${ansLine}<div class="exp"><span class="tag">${tenseTag}</span><br>${q.e}</div>${clueBox}${auto}
+    <button class="btn ${kind==='ok'?'green':''}" id="nextBtn">${last?(S.level===1?'🎁 FINISH LEVEL 1':'🏆 FINISH MISSION'):'NEXT ▶'}</button>`;
+  $('fbOverlay').classList.add('show');
+  $('nextBtn').addEventListener('click',()=>{ Snd.click(); next(); },{once:true});
+  if(kind==='time'){
+    const bar=$('autoBar'); bar.style.transition='width 4s linear'; requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.width='0%'));
+    S.autoNext=setTimeout(next,4000);
+  }
+}
+function next(){
+  if(S.advancing) return; S.advancing=true;
+  clearTimeout(S.autoNext); S.autoNext=null;
+  $('fbOverlay').classList.remove('show');
+  S.idx++;
+  $('progBar').style.width=(S.idx/10*100)+'%';
+  if(S.idx>=10){ S.level===1? levelOneDone() : finishGame(); }
+  else renderQuestion();
+}
+
+/* ---------- level 1 complete ---------- */
+function levelOneDone(){
+  const l1=S.log.filter(x=>x.lv===1);
+  $('l1Score').textContent=S.score[1]; $('l1Stars').textContent=S.stars;
+  $('l1Correct').textContent=l1.filter(x=>x.result==='correct').length;
+  $('l1Wrong').textContent=l1.filter(x=>x.result!=='correct').length;
+  // re-trigger gift animation
+  const g=document.querySelector('#scr-levelup .biggift'); const clone=g.cloneNode(true); g.replaceWith(clone);
+  wipe(()=>{ show('scr-levelup'); Snd.level(); FX.burst(innerWidth/2, innerHeight*.3, 90, 7, '⭐'); });
+}
+$('toL2Btn').onclick=()=>{ Snd.click(); wipe(()=>openLevel(2)); };
+
+/* ---------- victory ---------- */
+function finishGame(){
+  stopTimer();
+  const total=S.score[1]+S.score[2], rank=rankOf(total);
+  const ps=S.log.filter(x=>x.tense==='ps'), pc=S.log.filter(x=>x.tense==='pc');
+  S.payload = {
+    activityCode:ACTIVITY_CODE, submissionId:uid(), clientTime:new Date().toISOString(),
+    name:S.player.name, room:S.player.room, number:S.player.no,
+    level1Score:S.score[1], level2Score:S.score[2], totalScore:total,
+    correct:S.correct, wrong:S.wrong, timeout:S.timeout,
+    timeUsedSec:Math.round(S.timeUsedMs/1000), timeUsedText:fmtTime(S.timeUsedMs), rank,
+    psCorrect:ps.filter(x=>x.result==='correct').length, psTotal:ps.length,
+    pcCorrect:pc.filter(x=>x.result==='correct').length, pcTotal:pc.length,
+    clues:S.clues.length, answers:S.log
+  };
+  S.submitted=false; S.submitting=false;
+  store.set(PENDING_KEY, S.payload);  // backup so the score is never lost
+
+  $('vSanta').innerHTML=santaSVG(true); $('vTreeL').innerHTML=treeSVG(); $('vTreeR').innerHTML=treeSVG();
+  $('vRank').textContent='🏆 '+rank; $('vTotal').textContent=total;
+  const rows=[['ชื่อ-นามสกุล',S.player.name],['ห้องเรียน',S.player.room],['เลขที่',S.player.no],
+    ['คะแนนด่านที่ 1 (Santa\'s Christmas Rush)',`${S.score[1]} / 100`],['คะแนนด่านที่ 2 (The Mystery of Christmas Night)',`${S.score[2]} / 200`],
+    ['คะแนนรวม',`<b>${total} / 300</b>`],['ตอบถูก ✅',`${S.correct} ข้อ`],['ตอบผิด ❌',`${S.wrong} ข้อ`],['หมดเวลา ⏰',`${S.timeout} ข้อ`],
+    ['เวลาที่ใช้ตอบทั้งหมด',fmtTime(S.timeUsedMs)],['ระดับความสำเร็จ',`<b>${rank}</b>`]];
+  $('vTable').innerHTML=rows.map(([k,v],i)=>`<tr><th>${esc(k)}</th><td>${i===5||i===10?v:esc(v)}</td></tr>`).join('');
+  const n=S.clues.length;
+  $('vMystery').innerHTML = `<h4>🕵️ MYSTERY SOLVED: Who took the magic clock?</h4>
+    ${n>=6 ? 'ด้วยเบาะแส '+n+' ชิ้นที่คุณเก็บได้ คุณจับตัวคนร้ายได้สำเร็จ!' : 'คุณเก็บเบาะแสได้ '+n+' ชิ้น และเหล่าเอลฟ์ช่วยไขส่วนที่เหลือจนสำเร็จ!'}
+    คนร้ายคือ <b>❄️ Jack Frost</b> ผู้อยากให้ฤดูหนาวไม่มีวันจบ เขาซ่อนนาฬิกาไว้ในถ้ำน้ำแข็ง ตอนนี้นาฬิกาเดินอีกครั้ง และซานต้าส่งของขวัญได้ทันเวลา! 🎁🛷
+    ${n?`<ul class="clue-list">${S.clues.map(c=>`<li>${esc(c)}</li>`).join('')}</ul>`:''}`;
+  const st=$('submitStatus'); st.className='submit-status'; st.innerHTML='';
+  const sb=$('submitBtn'); sb.disabled=true; sb.innerHTML='<span class="spinner"></span>SENDING…'; sb.classList.remove('pulse');
+  wipe(()=>{ show('scr-victory'); Snd.victory(); FX.fireworks(7);
+    // ส่งคะแนนให้ครูอัตโนมัติทันทีที่เล่นจบ (ถ้าไม่สำเร็จ ปุ่มจะเปลี่ยนเป็น RETRY ให้กดส่งใหม่)
+    setTimeout(()=>submitScore(true), 1200); });
+}
+
+/* =========================================================
+   8) SUBMIT SCORE → Google Apps Script
+   ========================================================= */
+function sendToServer(payload){
+  // Case A: the game is opened from the Apps Script Web App link
+  if(window.google && google.script && google.script.run){
+    return new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(err=>rej(err instanceof Error?err:new Error(String(err)))).submitScore(payload));
+  }
+  // Case B: the game is hosted elsewhere and posts to SCRIPT_URL
+  if(!SCRIPT_URL) return Promise.reject(new Error('NO_URL'));
+  const ctrl = window.AbortController ? new AbortController() : null;
+  const to = setTimeout(()=>ctrl&&ctrl.abort(), 60000);
+  return fetch(SCRIPT_URL,{method:'POST', body:JSON.stringify(payload), signal:ctrl?ctrl.signal:undefined, redirect:'follow'})
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .finally(()=>clearTimeout(to));
+}
+function errText(e){
+  const m=(e&&e.message)||String(e);
+  if(m==='NO_URL') return 'ยังไม่ได้ตั้งค่าที่อยู่ระบบส่งคะแนน (SCRIPT_URL) — กรุณาแจ้งครู';
+  if(/abort/i.test(m)) return 'การเชื่อมต่อใช้เวลานานเกินไป';
+  if(/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'เชื่อมต่ออินเทอร์เน็ตหรือเซิร์ฟเวอร์ไม่ได้';
+  return m;
+}
+async function submitScore(auto){
+  if(!S||!S.payload||S.submitting||S.submitted) return;
+  S.submitting=true; if(auto!==true) Snd.click();
+  const sb=$('submitBtn'), st=$('submitStatus');
+  sb.disabled=true; sb.classList.remove('pulse'); sb.innerHTML='<span class="spinner"></span>SENDING…';
+  st.className='submit-status show wait'; st.innerHTML='<span class="spinner"></span>📨 กำลังส่งคะแนนให้ครูอัตโนมัติ… (อาจใช้เวลา 5–20 วินาที) อย่าเพิ่งปิดหน้านี้';
+  try{
+    const res = await sendToServer(S.payload);
+    if(!res || !res.ok) throw new Error((res&&res.error)||'ระบบตอบกลับไม่ถูกต้อง');
+    S.submitted=true; store.del(PENDING_KEY);
+    sb.innerHTML='✅ SENT'; sb.disabled=true;
+    st.className='submit-status show ok';
+    st.innerHTML = `🎉 ส่งคะแนนให้ครูเรียบร้อยแล้ว! ${res.duplicate?'(คะแนนนี้เคยส่งสำเร็จแล้ว ระบบไม่บันทึกซ้ำ)':'ครูได้รับคะแนนและรายงาน PDF แล้ว'}<br><small>รหัสอ้างอิง: ${esc(S.payload.submissionId.slice(0,8).toUpperCase())}</small>`;
+    Snd.level(); FX.burst(innerWidth/2, innerHeight/2, 80, 6, '🎁');
+  }catch(e){
+    sb.disabled=false; sb.innerHTML='🔁 RETRY SUBMIT'; sb.classList.add('pulse');
+    st.className='submit-status show err';
+    st.innerHTML=`❌ ส่งคะแนนไม่สำเร็จ: ${esc(errText(e))}<br>คะแนนของคุณยังถูกเก็บไว้ ไม่หายแน่นอน — กดปุ่ม <b>RETRY SUBMIT</b> เพื่อลองส่งอีกครั้ง`;
+    Snd.wrong();
+  }finally{ S.submitting=false; }
+}
+$('submitBtn').onclick=()=>submitScore(false);
+
+$('againBtn').onclick=async()=>{
+  Snd.click();
+  if(S && !S.submitted){ const ok=await confirmBox('คุณยังไม่ได้ส่งคะแนนรอบนี้ให้ครู ต้องการเล่นใหม่เลยหรือไม่? (คะแนนรอบนี้จะถูกเก็บไว้ส่งภายหลังได้ที่หน้าแรก)'); if(!ok) return; }
+  FX.stop(); const p=S.player;
+  $('fName').value=p.name; $('fRoom').value=p.room; $('fNo').value=p.no;
+  S=null; checkPending(); wipe(()=>show('scr-register'));
+};
+
+/* pending (unsent) score on the first screen */
+function checkPending(){
+  const p=store.get(PENDING_KEY), box=$('pendingBox');
+  if(p && p.submissionId){ $('pendingName').textContent=`${p.name} (${p.room} เลขที่ ${p.number}) ${p.totalScore}/300`; box.classList.add('show'); $('pendingMsg').textContent=''; }
+  else box.classList.remove('show');
+}
+$('pendingSend').onclick=async()=>{
+  const p=store.get(PENDING_KEY); if(!p) return checkPending();
+  const btn=$('pendingSend'); if(btn.disabled) return; btn.disabled=true; Snd.click();
+  $('pendingMsg').innerHTML='<span class="spinner"></span>กำลังส่ง…';
+  try{ const r=await sendToServer(p); if(!r||!r.ok) throw new Error((r&&r.error)||'ระบบตอบกลับไม่ถูกต้อง');
+    store.del(PENDING_KEY); $('pendingMsg').textContent='✅ ส่งสำเร็จแล้ว!'; Snd.correct(); setTimeout(checkPending,2500);
+  }catch(e){ $('pendingMsg').textContent='❌ ยังส่งไม่สำเร็จ: '+errText(e); Snd.wrong(); }
+  finally{ btn.disabled=false; }
+};
+checkPending();
+
+/* mute */
+function paintMute(){ $('muteBtn').textContent = Snd.muted?'🔇':'🔊'; }
+$('muteBtn').onclick=()=>{ Snd.unlock(); Snd.toggle(); paintMute(); };
+paintMute();
+
+/* warn before closing during a game */
+addEventListener('beforeunload', e=>{ if(S && (!S.payload || !S.submitted) && S.log.length){ e.preventDefault(); e.returnValue=''; } });
+
+/* =========================================================
+   9) DASHBOARD — ตารางคะแนนจาก Google Sheet
+   ========================================================= */
+const D = { rows:[], sortKey:'time', sortDir:-1, pin:'', timer:null, from:'scr-register' };
+const DCOLS = [
+  ['time','วันที่-เวลาส่ง'],['room','ห้อง'],['no','เลขที่'],['name','ชื่อ-นามสกุล'],
+  ['l1','ด่าน 1 (/100)'],['l2','ด่าน 2 (/200)'],['total','รวม (/300)'],
+  ['correct','ถูก'],['wrong','ผิด'],['timeout','หมดเวลา'],['timeUsed','เวลาที่ใช้'],['rank','ระดับ'],['pdf','PDF']
+];
+function loadDashboard(pin){
+  if(window.google && google.script && google.script.run){
+    return new Promise((res,rej)=>google.script.run.withSuccessHandler(res).withFailureHandler(e=>rej(e instanceof Error?e:new Error(String(e)))).getDashboard(pin||''));
+  }
+  if(!SCRIPT_URL) return Promise.reject(new Error('NO_URL'));
+  return fetch(SCRIPT_URL+'?action=dashboard&pin='+encodeURIComponent(pin||'')+'&t='+Date.now()).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); });
+}
+function dateKey(t){ const m=String(t).match(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})/); return m? m[3]+m[2]+m[1]+m[4]+m[5]+m[6] : String(t); }
+function secsOf(t){ const m=String(t).match(/(?:(\d+)\s*นาที)?\s*(\d+)\s*วินาที/); return m? (+(m[1]||0))*60+(+m[2]) : 0; }
+function roomKey(r){ return String(r).replace(/\d+/g,d=>d.padStart(3,'0')); }
+async function refreshDashboard(silent){
+  const msg=$('dashMsg');
+  if(!silent){ msg.className='dash-msg'; msg.innerHTML='<span class="spinner"></span>กำลังโหลดข้อมูล…'; }
+  try{
+    const r=await loadDashboard(D.pin);
+    if(!r || !r.ok){
+      if(r && r.needPin){ $('dashPinRow').style.display='flex'; msg.className='dash-msg err'; msg.textContent='🔒 '+r.error; D.rows=[]; renderDashboard(); return; }
+      throw new Error((r&&r.error)||'ระบบตอบกลับไม่ถูกต้อง');
+    }
+    $('dashPinRow').style.display='none';
+    D.rows=r.rows||[]; $('dashUpdated').textContent='อัปเดต '+r.updated;
+    msg.textContent=''; msg.className='dash-msg';
+    const sel=$('dashRoom'), cur=sel.value;
+    const rooms=[...new Set(D.rows.map(x=>x.room))].sort((a,b)=>roomKey(a).localeCompare(roomKey(b)));
+    sel.innerHTML='<option value="">ทุกห้อง ('+rooms.length+' ห้อง)</option>'+rooms.map(x=>`<option${x===cur?' selected':''}>${esc(x)}</option>`).join('');
+    renderDashboard();
+  }catch(e){ msg.className='dash-msg err'; msg.textContent='❌ โหลดข้อมูลไม่สำเร็จ: '+errText(e); }
+}
+function dashView(){
+  const room=$('dashRoom').value, q=$('dashSearch').value.trim().toLowerCase();
+  let rows=D.rows.filter(x=>(!room||x.room===room) && (!q || (x.name+' '+x.no).toLowerCase().includes(q)));
+  if($('dashLatest').checked){
+    const m=new Map(); rows.forEach(x=>{ const k=x.room+'|'+x.no+'|'+x.name; const o=m.get(k); if(!o || dateKey(x.time)>dateKey(o.time)) m.set(k,x); }); rows=[...m.values()];
+  }
+  const k=D.sortKey, d=D.sortDir;
+  const val=x=> k==='time'?dateKey(x.time) : k==='timeUsed'?secsOf(x.timeUsed) : k==='no'?(+x.no||0) : k==='room'?roomKey(x.room)+String(+x.no||0).padStart(3,'0') : x[k];
+  rows.sort((a,b)=>{ const A=val(a),B=val(b); return (typeof A==='number'&&typeof B==='number'? A-B : String(A).localeCompare(String(B),'th'))*d; });
+  return rows;
+}
+function renderDashboard(){
+  const rows=dashView(), n=rows.length;
+  const avg=n? Math.round(rows.reduce((s,x)=>s+x.total,0)/n*10)/10 : 0;
+  const max=n? Math.max(...rows.map(x=>x.total)) : 0, min=n? Math.min(...rows.map(x=>x.total)) : 0;
+  const pass=rows.filter(x=>x.total>=180).length;
+  $('dashTiles').innerHTML=[['จำนวนผู้ส่ง',n+' คน'],['คะแนนเฉลี่ย',avg+' / 300'],['สูงสุด',max],['ต่ำสุด',min],['ได้ 180 ขึ้นไป',n?Math.round(pass/n*100)+'%':'—']]
+    .map(([a,b])=>`<div class="tile"><small>${a}</small><b>${b}</b></div>`).join('');
+  $('dashRanks').innerHTML=['TIME MASTER','TIME EXPERT','TIME EXPLORER','TIME ROOKIE']
+    .map(r=>`<span class="rk-${r.replace(/ /g,'-')}">${r}: ${rows.filter(x=>x.rank===r).length}</span>`).join('');
+  const head='<tr>'+DCOLS.map(([k,l])=>`<th data-k="${k}">${l}${D.sortKey===k?(D.sortDir>0?' ▲':' ▼'):''}</th>`).join('')+'</tr>';
+  const body=rows.map(x=>`<tr><td>${esc(x.time)}</td><td>${esc(x.room)}</td><td class="num">${esc(x.no)}</td><td>${esc(x.name)}</td>
+    <td class="num">${x.l1}</td><td class="num">${x.l2}</td><td class="num tot">${x.total}</td>
+    <td class="num">${x.correct}</td><td class="num">${x.wrong}</td><td class="num">${x.timeout}</td><td>${esc(x.timeUsed)}</td>
+    <td><span class="rk rk-${esc(String(x.rank).replace(/ /g,'-'))}">${esc(x.rank)}</span></td>
+    <td>${/^https:\/\//.test(x.pdf)?`<a href="${esc(x.pdf)}" target="_blank" rel="noopener">เปิด</a>`:'—'}</td></tr>`).join('');
+  $('dashTable').innerHTML = head + (body || `<tr><td colspan="${DCOLS.length}" class="dash-empty">ยังไม่มีคะแนนที่ตรงกับเงื่อนไข</td></tr>`);
+  $('dashTable').querySelectorAll('th').forEach(th=>th.onclick=()=>{ const k=th.dataset.k; if(k==='pdf') return; D.sortDir = D.sortKey===k? -D.sortDir : (['total','l1','l2','correct','time'].includes(k)?-1:1); D.sortKey=k; renderDashboard(); });
+}
+function openDashboard(){
+  Snd.click(); D.from=document.querySelector('.screen.active')?.id||'scr-register';
+  FX.stop(); show('scr-dash'); refreshDashboard();
+  clearInterval(D.timer); D.timer=setInterval(()=>{ if($('scr-dash').classList.contains('active')) refreshDashboard(true); },30000);
+}
+$('openDash').onclick=openDashboard; $('openDash2').onclick=openDashboard;
+$('dashBack').onclick=()=>{ Snd.click(); clearInterval(D.timer); show(D.from==='scr-dash'?'scr-register':D.from); };
+$('dashRefresh').onclick=()=>{ Snd.click(); refreshDashboard(); };
+$('dashRoom').onchange=renderDashboard; $('dashSearch').oninput=renderDashboard; $('dashLatest').onchange=renderDashboard;
+$('dashPinGo').onclick=()=>{ D.pin=$('dashPin').value.trim(); refreshDashboard(); };
+$('dashPin').addEventListener('keydown',e=>{ if(e.key==='Enter') $('dashPinGo').click(); });
+$('dashPrint').onclick=()=>{ Snd.click(); window.print(); };
+$('dashCsv').onclick=()=>{
+  Snd.click(); const rows=dashView();
+  const cell=v=>{ v=String(v==null?'':v); if(/^[=+\-@]/.test(v)) v="'"+v; return '"'+v.replace(/"/g,'""')+'"'; };
+  const csv='﻿'+[DCOLS.filter(c=>c[0]!=='pdf').map(c=>cell(c[1])).join(',')]
+    .concat(rows.map(x=>DCOLS.filter(c=>c[0]!=='pdf').map(c=>cell(x[c[0]])).join(','))).join('\r\n');
+  try{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    a.download='Cake28_scores'+($('dashRoom').value?'_'+$('dashRoom').value.replace(/[\/\\]/g,'-'):'')+'.csv'; document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){ $('dashMsg').textContent='ดาวน์โหลดไม่ได้ในหน้านี้ — เปิด Google Sheet เพื่อดาวน์โหลดแทน'; }
+};
+/* เปิด Dashboard ตรงจากลิงก์: ...?page=dashboard หรือ #dashboard */
+(function(){
+  const go=()=>{ D.from='scr-register'; openDashboard(); };
+  if(window.google && google.script && google.script.url){ google.script.url.getLocation(l=>{ if(l && l.parameter && l.parameter.page==='dashboard') go(); }); }
+  else if(/[?&]page=dashboard/.test(location.search) || location.hash==='#dashboard') go();
+})();
+</script>
+</body>
+</html>
